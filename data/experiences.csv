@@ -1,0 +1,11 @@
+id,name,icon,category,experience_count,description
+1,Adventure,fa-mountain,outdoor,234,"Trekking, climbing, and adrenaline-fueled journeys across the planet's most dramatic landscapes."
+2,Culture & Heritage,fa-landmark,cultural,189,"Immersive tours through ancient cities, museums, and living traditions passed down through generations."
+3,Food & Wine,fa-utensils,culinary,312,"Michelin-starred dining, street food safaris, vineyard hops, and cooking classes with local masters."
+4,Beach & Island,fa-umbrella-beach,relaxation,178,"Pristine shorelines, coral reefs, overwater villas, and sun-soaked island escapes."
+5,Mountains,fa-snowflake,outdoor,145,"Alpine retreats, ski adventures, mountain lodge stays, and summit sunrise experiences."
+6,Wellness & Spa,fa-spa,relaxation,98,"World-class spa resorts, yoga retreats, hot springs, and holistic healing journeys."
+7,Photography,fa-camera-retro,creative,67,"Guided photo expeditions to the planet's most visually stunning and Instagram-worthy locations."
+8,Wildlife Safari,fa-paw,outdoor,112,"Guided safaris and wildlife encounters from African plains to Arctic tundras."
+9,Nightlife,fa-music,entertainment,156,"Rooftop bars, underground clubs, live music scenes, and after-dark cultural experiences."
+10,Historical Tours,fa-scroll,cultural,203,"Walk through centuries of history with expert-guided tours of the world's most significant sites."

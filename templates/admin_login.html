@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login — Wander</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'DM Sans', sans-serif; background: #0D1B2A;
+            min-height: 100vh; display: flex; align-items: center; justify-content: center;
+            background: linear-gradient(135deg, #0D1B2A 0%, #1B2D45 100%);
+        }
+        .login-card {
+            background: #fff; border-radius: 1.25rem; padding: 3rem 2.5rem;
+            width: 100%; max-width: 420px; box-shadow: 0 32px 64px rgba(0,0,0,0.3);
+        }
+        .login-logo { font-family: 'Playfair Display', serif; font-size: 2rem; color: #0D1B2A; text-align: center; margin-bottom: 0.5rem; }
+        .login-logo span { color: #C9A84C; }
+        .login-subtitle { text-align: center; color: #74777d; font-size: 0.85rem; margin-bottom: 2rem; }
+        .badge { display: inline-block; background: rgba(201,168,76,0.12); color: #9A7B33; padding: 0.25rem 0.75rem; border-radius: 2rem; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 2rem; }
+        .login-header { text-align: center; }
+        label { display: block; font-size: 0.8rem; font-weight: 600; color: #1d1c17; margin-bottom: 0.5rem; }
+        .input-wrap { position: relative; margin-bottom: 1.25rem; }
+        .input-wrap i { position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: #74777d; font-size: 0.95rem; }
+        input[type="email"], input[type="password"] {
+            width: 100%; padding: 0.875rem 1rem 0.875rem 2.75rem;
+            border: 1.5px solid #e8e4dc; border-radius: 0.5rem;
+            font-size: 0.9rem; font-family: 'DM Sans', sans-serif;
+            color: #1d1c17; transition: border 0.3s; outline: none;
+            background: #fefaf3;
+        }
+        input:focus { border-color: #C9A84C; box-shadow: 0 0 0 3px rgba(201,168,76,0.1); }
+        .btn-login {
+            width: 100%; padding: 0.9rem; background: #0D1B2A; color: white;
+            border: none; border-radius: 0.5rem; font-size: 0.9rem; font-weight: 600;
+            cursor: pointer; transition: all 0.3s; font-family: 'DM Sans', sans-serif;
+            letter-spacing: 0.02em; margin-top: 0.5rem;
+        }
+        .btn-login:hover { background: #1B2D45; transform: translateY(-1px); box-shadow: 0 8px 20px rgba(13,27,42,0.2); }
+        .error-msg { color: #ba1a1a; font-size: 0.82rem; text-align: center; min-height: 1.3rem; margin-top: 0.75rem; }
+        .back-link { display: block; text-align: center; margin-top: 1.5rem; font-size: 0.82rem; color: #74777d; text-decoration: none; transition: color 0.2s; }
+        .back-link:hover { color: #0D1B2A; }
+        .hint { background: rgba(201,168,76,0.08); border: 1px solid rgba(201,168,76,0.2); border-radius: 0.5rem; padding: 0.75rem 1rem; font-size: 0.78rem; color: #74777d; margin-bottom: 1.5rem; }
+        .hint strong { color: #9A7B33; }
+    </style>
+</head>
+<body>
+    <div class="login-card">
+        <div class="login-header">
+            <div class="login-logo">Wan<span>der</span></div>
+            <div class="login-subtitle">Luxury Travel Guide</div>
+            <span class="badge"><i class="fas fa-shield-alt"></i> Admin Access</span>
+        </div>
+        <div class="hint">
+            <strong>Default credentials:</strong><br>
+            Email: admin@wander.com &nbsp;|&nbsp; Password: admin123
+        </div>
+        <form id="adminLoginForm" onsubmit="handleLogin(event)">
+            <div class="input-wrap">
+                <label for="adminEmail">Email Address</label>
+                <i class="fas fa-envelope"></i>
+                <input type="email" id="adminEmail" placeholder="admin@wander.com" value="admin@wander.com" required>
+            </div>
+            <div class="input-wrap">
+                <label for="adminPassword">Password</label>
+                <i class="fas fa-lock"></i>
+                <input type="password" id="adminPassword" placeholder="••••••••" value="admin123" required>
+            </div>
+            <button class="btn-login" type="submit" id="loginBtn">
+                <i class="fas fa-sign-in-alt"></i> Sign In to Admin
+            </button>
+            <div class="error-msg" id="errorMsg"></div>
+        </form>
+        <a href="/" class="back-link"><i class="fas fa-arrow-left"></i> Back to Wander Site</a>
+    </div>
+
+    <script>
+        async function handleLogin(e) {
+            e.preventDefault();
+            const btn = document.getElementById('loginBtn');
+            const errEl = document.getElementById('errorMsg');
+            errEl.textContent = '';
+            btn.textContent = 'Signing in…';
+            btn.disabled = true;
+
+            const email = document.getElementById('adminEmail').value.trim();
+            const password = document.getElementById('adminPassword').value;
+
+            try {
+                const res = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password }),
+                    credentials: 'include'
+                });
+                const data = await res.json();
+
+                if (data.success) {
+                    if (data.user.is_admin) {
+                        window.location.href = '/admin';
+                    } else {
+                        errEl.textContent = 'This account does not have admin privileges.';
+                        btn.textContent = 'Sign In to Admin';
+                        btn.disabled = false;
+                    }
+                } else {
+                    errEl.textContent = data.error || 'Login failed.';
+                    btn.textContent = 'Sign In to Admin';
+                    btn.disabled = false;
+                }
+            } catch {
+                errEl.textContent = 'Network error. Please try again.';
+                btn.textContent = 'Sign In to Admin';
+                btn.disabled = false;
+            }
+        }
+    </script>
+</body>
+</html>

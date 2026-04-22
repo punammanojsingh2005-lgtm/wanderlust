@@ -1,0 +1,3316 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wander — Luxury Travel Guide</title>
+    <meta name="description"
+        content="Discover the world's most extraordinary destinations with Wander. Curated luxury travel experiences, editorial guides, and bespoke trip planning.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* ========== RESET & TOKENS ========== */
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* Palette — Heritage Luxury */
+            --navy: #0D1B2A;
+            --navy-deep: #0a1420;
+            --navy-mid: #1B2D45;
+            --navy-light: #3a4859;
+            --gold: #C9A84C;
+            --gold-light: #ffe08f;
+            --gold-muted: #9A7B33;
+            --cream: #FEF9F1;
+            --cream-mid: #F5F0E8;
+            --cream-dark: #ece8e0;
+            --surface: #f8f3eb;
+            --text-primary: #1d1c17;
+            --text-secondary: #44474c;
+            --text-muted: #74777d;
+            --white: #ffffff;
+            --error: #ba1a1a;
+            --outline: rgba(116, 119, 125, 0.2);
+
+            /* Typography */
+            --font-display: 'Playfair Display', 'Georgia', serif;
+            --font-body: 'DM Sans', 'Helvetica Neue', sans-serif;
+
+            /* Shadows — Cloud Shadow Philosophy */
+            --shadow-sm: 0 4px 12px rgba(13, 27, 42, 0.04);
+            --shadow-md: 0 8px 24px rgba(13, 27, 42, 0.06);
+            --shadow-lg: 0 20px 40px rgba(13, 27, 42, 0.08);
+            --shadow-xl: 0 32px 64px rgba(13, 27, 42, 0.1);
+
+            /* Transitions */
+            --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+            --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        [data-theme="dark"] {
+            --cream: #060c14;
+            --cream-mid: #0a1420;
+            --cream-dark: #132438;
+            --surface: #0a1420;
+            --text-primary: #f0ebd8;
+            --text-secondary: #b5b8c0;
+            --text-muted: #888b94;
+            --white: #101c2a;
+            --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.4);
+            --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.5);
+            --shadow-lg: 0 20px 40px rgba(0, 0, 0, 0.6);
+            --shadow-xl: 0 32px 64px rgba(0, 0, 0, 0.7);
+            --outline: rgba(255, 255, 255, 0.1);
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--cream);
+            color: var(--text-primary);
+            line-height: 1.7;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            cursor: none;
+            /* Custom cursor */
+            transition: background-color 0.4s var(--ease-out),
+            color 0.4s var(--ease-out);
+        }
+
+        /* ========== CUSTOM CURSOR ========== */
+        .cursor-dot {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 8px;
+            height: 8px;
+            background: var(--gold);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: opacity 0.3s;
+        }
+
+        .cursor-outline {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 40px;
+            height: 40px;
+            border: 1px solid rgba(201, 168, 76, 0.6);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9998;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s var(--ease-out), height 0.3s var(--ease-out), background 0.3s var(--ease-out), border-color 0.3s;
+        }
+
+        .cursor-outline.hover {
+            width: 60px;
+            height: 60px;
+            background: rgba(201, 168, 76, 0.1);
+            border-color: var(--gold);
+        }
+
+        @media (max-width: 768px) {
+            body {
+                cursor: auto;
+            }
+
+            .cursor-dot,
+            .cursor-outline {
+                display: none;
+            }
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5 {
+            font-family: var(--font-display);
+            font-weight: 700;
+            line-height: 1.15;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        img {
+            max-width: 100%;
+            display: block;
+        }
+
+        button,
+        input {
+            font-family: var(--font-body);
+            border: none;
+            outline: none;
+        }
+
+        /* ========== UTILITY ========== */
+        .section-kicker {
+            font-family: var(--font-body);
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--gold-muted);
+            margin-bottom: 1rem;
+            display: inline-block;
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 4vw, 3rem);
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+
+        .section-subtitle {
+            font-size: 1.05rem;
+            color: var(--text-secondary);
+            max-width: 540px;
+            line-height: 1.8;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Fade-in animation */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s var(--ease-out), transform 0.8s var(--ease-out);
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ========== NAVBAR ========== */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 1.25rem 0;
+            transition: all 0.5s var(--ease-out);
+        }
+
+        .navbar.scrolled {
+            padding: 0.75rem 0;
+            background: rgba(254, 249, 241, 0.82);
+            backdrop-filter: blur(20px) saturate(1.6);
+            -webkit-backdrop-filter: blur(20px) saturate(1.6);
+            box-shadow: 0 1px 0 rgba(13, 27, 42, 0.06);
+        }
+
+        .navbar .container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .nav-logo {
+            font-family: var(--font-display);
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--white);
+            transition: color 0.5s;
+            letter-spacing: -0.02em;
+        }
+
+        .nav-logo span {
+            color: var(--gold);
+        }
+
+        .navbar.scrolled .nav-logo {
+            color: var(--text-primary);
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 2.5rem;
+        }
+
+        .nav-links a {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.85);
+            letter-spacing: 0.02em;
+            transition: color 0.3s;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gold);
+            transition: width 0.3s var(--ease-out);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .navbar.scrolled .nav-links a {
+            color: var(--text-secondary);
+        }
+
+        .navbar.scrolled .nav-links a:hover {
+            color: var(--text-primary);
+        }
+
+        .theme-toggle {
+            cursor: none;
+            background: none;
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 1.1rem;
+            transition: color 0.3s;
+        }
+
+        .navbar.scrolled .theme-toggle {
+            color: var(--text-secondary);
+        }
+
+        .navbar.scrolled .theme-toggle:hover {
+            color: var(--text-primary);
+        }
+
+        .nav-cta {
+            padding: 0.6rem 1.5rem;
+            background: var(--gold);
+            color: var(--navy) !important;
+            font-weight: 600 !important;
+            font-size: 0.8rem !important;
+            letter-spacing: 0.08em !important;
+            text-transform: uppercase;
+            border-radius: 0.375rem;
+            transition: all 0.3s var(--ease-out);
+            cursor: pointer;
+        }
+
+        .nav-cta::after {
+            display: none !important;
+        }
+
+        .nav-cta:hover {
+            background: var(--gold-light);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+
+        /* Hamburger */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        .hamburger span {
+            width: 24px;
+            height: 2px;
+            background: var(--white);
+            transition: all 0.3s;
+            border-radius: 2px;
+        }
+
+        .navbar.scrolled .hamburger span {
+            background: var(--text-primary);
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+
+        /* ========== HERO ========== */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            background: url('https://images.unsplash.com/photo-1506929562872-bb421503ef21?w=1920&q=80') center/cover no-repeat;
+            transform: scale(1.1);
+            will-change: transform;
+            transition: transform 0.1s linear;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg,
+                    rgba(13, 27, 42, 0.55) 0%,
+                    rgba(13, 27, 42, 0.4) 40%,
+                    rgba(13, 27, 42, 0.7) 100%);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            padding: 0 2rem;
+            max-width: 820px;
+        }
+
+        .hero-kicker {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 1.75rem;
+        }
+
+        .hero-kicker::before,
+        .hero-kicker::after {
+            content: '';
+            width: 40px;
+            height: 1px;
+            background: var(--gold);
+            opacity: 0.5;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 6.5vw, 5rem);
+            color: var(--white);
+            margin-bottom: 1.25rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        .hero h1 em {
+            font-style: italic;
+            color: var(--gold-light);
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1rem, 1.8vw, 1.2rem);
+            color: rgba(255, 255, 255, 0.75);
+            max-width: 560px;
+            margin: 0 auto 2.5rem;
+            line-height: 1.8;
+        }
+
+        /* Search bar */
+        .hero-search {
+            display: flex;
+            align-items: center;
+            max-width: 520px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-radius: 0.5rem;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            transition: all 0.4s var(--ease-out);
+        }
+
+        .hero-search:focus-within {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: var(--gold);
+            box-shadow: 0 0 0 4px rgba(201, 168, 76, 0.15);
+            transform: scale(1.02);
+        }
+
+        .hero-search i {
+            padding: 0 1.25rem;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 1rem;
+        }
+
+        .hero-search input {
+            flex: 1;
+            padding: 1rem 0;
+            background: transparent;
+            color: var(--white);
+            font-size: 0.95rem;
+        }
+
+        .hero-search input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .hero-search button {
+            padding: 0.8rem 1.75rem;
+            margin: 0.4rem;
+            background: var(--gold);
+            color: var(--navy);
+            font-weight: 600;
+            font-size: 0.8rem;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            border-radius: 0.35rem;
+            cursor: pointer;
+            transition: all 0.3s var(--ease-out);
+        }
+
+        .hero-search button:hover {
+            background: var(--gold-light);
+        }
+
+        .hero-scroll-hint {
+            position: absolute;
+            bottom: 2.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.7rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            animation: float 2.5s ease-in-out infinite;
+        }
+
+        .hero-scroll-hint i {
+            font-size: 1.2rem;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateX(-50%) translateY(0);
+            }
+
+            50% {
+                transform: translateX(-50%) translateY(8px);
+            }
+        }
+
+        /* ========== DESTINATIONS ========== */
+        .destinations {
+            padding: 7rem 0;
+            background: var(--cream);
+        }
+
+        .destinations-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .destinations-header .section-subtitle {
+            margin: 0 auto;
+        }
+
+        /* ========== MODAL ========== */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(13, 27, 42, 0.85);
+            backdrop-filter: blur(8px);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s var(--ease-out);
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal {
+            background: var(--cream);
+            width: 90%;
+            max-width: 900px;
+            max-height: 90vh;
+            border-radius: 1rem;
+            overflow-y: auto;
+            overflow-x: hidden;
+            position: relative;
+            transform: translateY(40px) scale(0.95);
+            transition: all 0.5s var(--ease-spring);
+        }
+
+        .modal-overlay.active .modal {
+            transform: translateY(0) scale(1);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            background: var(--white);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: grid;
+            place-items: center;
+            font-size: 1.2rem;
+            cursor: none;
+            z-index: 2;
+            transition: all 0.3s;
+            box-shadow: var(--shadow-md);
+            color: var(--text-primary);
+            border: none;
+        }
+
+        .modal-close:hover {
+            background: var(--gold);
+            color: var(--navy);
+            transform: rotate(90deg);
+        }
+
+        .modal-hero {
+            height: 350px;
+            position: relative;
+        }
+
+        .modal-hero img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .modal-content {
+            padding: 2.5rem;
+            color: var(--text-primary);
+        }
+
+        .modal-title {
+            font-family: var(--font-display);
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .modal-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--outline);
+            padding-bottom: 1.5rem;
+        }
+
+        .modal-meta div {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .modal-meta i {
+            color: var(--gold);
+        }
+
+        .destinations-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        /* Filters */
+        .dest-filters {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 2.5rem;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+
+        .filter-chips {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-chip {
+            padding: 0.5rem 1.25rem;
+            background: var(--white);
+            color: var(--text-secondary);
+            border: 1px solid var(--outline);
+            border-radius: 2rem;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: none;
+            transition: all 0.3s;
+        }
+
+        .filter-chip:hover,
+        .filter-chip.active {
+            background: var(--gold);
+            color: var(--navy);
+            /* Always dark on gold */
+            border-color: var(--gold);
+        }
+
+        .filter-sort {
+            padding: 0.5rem 1rem;
+            background: var(--white);
+            color: var(--text-secondary);
+            border: 1px solid var(--outline);
+            border-radius: 0.5rem;
+            font-size: 0.85rem;
+            cursor: none;
+        }
+
+        /* Skeletons */
+        .skeleton {
+            background: linear-gradient(90deg, var(--white) 25%, var(--cream-dark) 50%, var(--white) 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+            border-radius: 0.25rem;
+        }
+
+        [data-theme="dark"] .skeleton {
+            background: linear-gradient(90deg, var(--white) 25%, var(--cream-mid) 50%, var(--white) 75%);
+            background-size: 200% 100%;
+        }
+
+        @keyframes loading {
+            0% {
+                background-position: 200% 0;
+            }
+
+            100% {
+                background-position: -200% 0;
+            }
+        }
+
+        .dest-skeleton {
+            background: var(--white);
+            border-radius: 0.75rem;
+            overflow: hidden;
+            padding-bottom: 1.5rem;
+        }
+
+        .dest-skeleton .skeleton-img {
+            height: 280px;
+            border-radius: 0;
+        }
+
+        .dest-skeleton .skeleton-text {
+            height: 20px;
+            margin: 1rem 1.75rem;
+            width: 80%;
+        }
+
+        .dest-skeleton .skeleton-text:last-child {
+            width: 50%;
+        }
+
+        .dest-card {
+            background: var(--white);
+            border-radius: 0.75rem;
+            overflow: hidden;
+            transition: all 0.5s var(--ease-out);
+            cursor: pointer;
+        }
+
+        .dest-card:hover {
+            transform: translateY(-12px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .dest-card-img {
+            position: relative;
+            height: 280px;
+            overflow: hidden;
+        }
+
+        .dest-card-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s var(--ease-out);
+        }
+
+        .dest-card:hover .dest-card-img img {
+            transform: scale(1.08);
+        }
+
+        .dest-card-badge {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            padding: 0.3rem 0.85rem;
+            background: rgba(13, 27, 42, 0.7);
+            backdrop-filter: blur(8px);
+            color: var(--white);
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            border-radius: 2rem;
+        }
+
+        .dest-card-body {
+            padding: 1.75rem;
+        }
+
+        .dest-card-location {
+            font-size: 0.72rem;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--gold-muted);
+            margin-bottom: 0.5rem;
+        }
+
+        .dest-card-title {
+            font-family: var(--font-display);
+            font-size: 1.4rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .dest-card-desc {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 1rem;
+        }
+
+        .dest-card-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .dest-card-stars {
+            display: flex;
+            gap: 0.2rem;
+            color: var(--gold);
+            font-size: 0.8rem;
+        }
+
+        .dest-card-price {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+        }
+
+        .dest-card-price span {
+            font-size: 0.75rem;
+            font-weight: 400;
+            color: var(--text-muted);
+        }
+
+        /* ========== EXPERIENCES ========== */
+        .experiences {
+            padding: 6rem 0;
+            background: var(--surface);
+        }
+
+        .experiences-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .experiences-header .section-subtitle {
+            margin: 0 auto;
+        }
+
+        .experiences-scroll {
+            display: flex;
+            gap: 1.25rem;
+            overflow-x: auto;
+            padding: 1rem 2rem 2rem;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+        }
+
+        .experiences-scroll::-webkit-scrollbar {
+            display: none;
+        }
+
+        .exp-chip {
+            flex: 0 0 auto;
+            scroll-snap-align: start;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.25rem 2rem;
+            background: var(--white);
+            border-radius: 0.75rem;
+            cursor: pointer;
+            transition: all 0.4s var(--ease-out);
+            min-width: 220px;
+        }
+
+        .exp-chip:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-lg);
+            background: var(--navy);
+        }
+
+        .exp-chip:hover .exp-chip-icon {
+            background: var(--gold);
+            color: var(--navy);
+        }
+
+        .exp-chip:hover .exp-chip-name {
+            color: var(--white);
+        }
+
+        .exp-chip:hover .exp-chip-count {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .exp-chip-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 0.625rem;
+            background: var(--cream-dark);
+            display: grid;
+            place-items: center;
+            font-size: 1.2rem;
+            color: var(--navy);
+            transition: all 0.4s var(--ease-out);
+        }
+
+        .exp-chip-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .exp-chip-name {
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--text-primary);
+            transition: color 0.3s;
+        }
+
+        .exp-chip-count {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            transition: color 0.3s;
+        }
+
+        /* ========== HOW IT WORKS ========== */
+        .how-it-works {
+            padding: 7rem 0;
+            background: var(--navy);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .how-it-works::before {
+            content: '';
+            position: absolute;
+            top: -200px;
+            right: -200px;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(201, 168, 76, 0.08), transparent 70%);
+        }
+
+        .how-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .how-header .section-kicker {
+            color: var(--gold);
+        }
+
+        .how-header .section-title {
+            color: var(--white);
+        }
+
+        .how-header .section-subtitle {
+            color: rgba(255, 255, 255, 0.6);
+            margin: 0 auto;
+        }
+
+        .how-steps {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2.5rem;
+            position: relative;
+        }
+
+        .how-step {
+            text-align: center;
+            position: relative;
+            padding: 2.5rem 1.5rem;
+        }
+
+        .how-step-number {
+            font-family: var(--font-display);
+            font-size: 4.5rem;
+            font-weight: 700;
+            color: rgba(201, 168, 76, 0.1);
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            line-height: 1;
+        }
+
+        .how-step-icon {
+            width: 72px;
+            height: 72px;
+            margin: 0 auto 1.5rem;
+            border-radius: 1rem;
+            background: linear-gradient(135deg, var(--navy-mid), var(--navy-light));
+            display: grid;
+            place-items: center;
+            font-size: 1.5rem;
+            color: var(--gold);
+            position: relative;
+        }
+
+        .how-step h3 {
+            color: var(--white);
+            font-size: 1.3rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .how-step p {
+            color: rgba(255, 255, 255, 0.55);
+            font-size: 0.9rem;
+            line-height: 1.8;
+            max-width: 280px;
+            margin: 0 auto;
+        }
+
+        .how-connector {
+            position: absolute;
+            top: 50%;
+            right: -1.25rem;
+            width: 2.5rem;
+            height: 2px;
+            background: linear-gradient(90deg, var(--gold), transparent);
+            opacity: 0.3;
+        }
+
+        .how-step:last-child .how-connector {
+            display: none;
+        }
+
+        /* ========== REVIEWS ========== */
+        .reviews {
+            padding: 7rem 0;
+            background: var(--cream);
+        }
+
+        .reviews-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .reviews-header .section-subtitle {
+            margin: 0 auto;
+        }
+
+        .reviews-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .review-card {
+            background: var(--white);
+            border-radius: 0.75rem;
+            padding: 2.5rem;
+            transition: all 0.5s var(--ease-out);
+            position: relative;
+        }
+
+        .review-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .review-card-quote {
+            font-size: 3rem;
+            line-height: 1;
+            color: var(--gold);
+            opacity: 0.3;
+            font-family: var(--font-display);
+            position: absolute;
+            top: 1.5rem;
+            right: 2rem;
+        }
+
+        .review-card-stars {
+            display: flex;
+            gap: 0.2rem;
+            color: var(--gold);
+            font-size: 0.75rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .review-card p {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            line-height: 1.85;
+            margin-bottom: 1.75rem;
+            font-style: italic;
+        }
+
+        .review-card-author {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .review-card-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .review-card-name {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--navy);
+        }
+
+        .review-card-trip {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+        }
+
+        /* ========== NEWSLETTER ========== */
+        .newsletter {
+            padding: 6rem 0;
+            background: linear-gradient(135deg, var(--navy), var(--navy-mid));
+            position: relative;
+            overflow: hidden;
+        }
+
+        .newsletter::before {
+            content: '';
+            position: absolute;
+            bottom: -150px;
+            left: -150px;
+            width: 400px;
+            height: 400px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(201, 168, 76, 0.1), transparent 70%);
+        }
+
+        .newsletter::after {
+            content: '';
+            position: absolute;
+            top: -100px;
+            right: -100px;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(201, 168, 76, 0.06), transparent 70%);
+        }
+
+        .newsletter-inner {
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .newsletter .section-kicker {
+            color: var(--gold);
+        }
+
+        .newsletter .section-title {
+            color: var(--white);
+            margin-bottom: 0.75rem;
+        }
+
+        .newsletter-subtitle {
+            font-size: 1.05rem;
+            color: rgba(255, 255, 255, 0.6);
+            max-width: 480px;
+            margin: 0 auto 2.5rem;
+            line-height: 1.8;
+        }
+
+        .newsletter-form {
+            display: flex;
+            max-width: 480px;
+            margin: 0 auto;
+            gap: 0.5rem;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 0.5rem;
+            padding: 0.4rem;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+        }
+
+        .newsletter-form input {
+            flex: 1;
+            padding: 0.9rem 1.25rem;
+            background: transparent;
+            color: var(--white);
+            font-size: 0.9rem;
+            border-radius: 0.35rem;
+        }
+
+        .newsletter-form input::placeholder {
+            color: rgba(255, 255, 255, 0.45);
+        }
+
+        .newsletter-form button {
+            padding: 0.9rem 2rem;
+            background: var(--gold);
+            color: var(--navy);
+            font-weight: 600;
+            font-size: 0.8rem;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            border-radius: 0.35rem;
+            cursor: pointer;
+            transition: all 0.3s var(--ease-out);
+            white-space: nowrap;
+        }
+
+        .newsletter-form button:hover {
+            background: var(--gold-light);
+        }
+
+        .newsletter-note {
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.35);
+            margin-top: 1rem;
+        }
+
+        /* ========== FOOTER ========== */
+        .footer {
+            padding: 4.5rem 0 0;
+            background: var(--navy-deep);
+        }
+
+        .footer-top {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 3rem;
+            padding-bottom: 4rem;
+        }
+
+        .footer-brand .nav-logo {
+            font-size: 1.5rem;
+            color: var(--white);
+            margin-bottom: 1rem;
+            display: inline-block;
+        }
+
+        .footer-brand p {
+            font-size: 0.88rem;
+            color: rgba(255, 255, 255, 0.45);
+            line-height: 1.8;
+            max-width: 280px;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-socials {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .footer-socials a {
+            width: 40px;
+            height: 40px;
+            border-radius: 0.5rem;
+            background: rgba(255, 255, 255, 0.06);
+            display: grid;
+            place-items: center;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.95rem;
+            transition: all 0.3s;
+        }
+
+        .footer-socials a:hover {
+            background: var(--gold);
+            color: var(--navy);
+        }
+
+        .footer-col h4 {
+            font-family: var(--font-body);
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.4);
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-col a {
+            display: block;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 0.85rem;
+            transition: color 0.3s;
+        }
+
+        .footer-col a:hover {
+            color: var(--gold);
+        }
+
+        .footer-bottom {
+            padding: 1.75rem 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .footer-bottom p {
+            font-size: 0.78rem;
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        .footer-bottom-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .footer-bottom-links a {
+            font-size: 0.78rem;
+            color: rgba(255, 255, 255, 0.3);
+            transition: color 0.3s;
+        }
+
+        .footer-bottom-links a:hover {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        /* ========== MOBILE MENU ========== */
+        .mobile-menu {
+            position: fixed;
+            inset: 0;
+            background: var(--navy);
+            z-index: 999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 2rem;
+            transform: translateX(100%);
+            transition: transform 0.5s var(--ease-out);
+        }
+
+        .mobile-menu.active {
+            transform: translateX(0);
+        }
+
+        .mobile-menu a {
+            font-family: var(--font-display);
+            font-size: 2rem;
+            color: var(--white);
+            transition: color 0.3s;
+        }
+
+        .mobile-menu a:hover {
+            color: var(--gold);
+        }
+
+        .mobile-menu .nav-cta {
+            margin-top: 1rem;
+            padding: 0.8rem 2rem;
+            font-size: 0.85rem !important;
+        }
+
+        /* ========== RESPONSIVE ========== */
+        @media (max-width: 1024px) {
+            .destinations-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .reviews-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .how-steps {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 1.5rem;
+            }
+
+            .footer-top {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            .hero h1 {
+                font-size: clamp(2rem, 8vw, 3rem);
+            }
+
+            .hero-search {
+                flex-direction: column;
+                padding: 0.75rem;
+            }
+
+            .hero-search input {
+                padding: 0.75rem 1rem;
+                text-align: center;
+            }
+
+            .hero-search i {
+                display: none;
+            }
+
+            .hero-search button {
+                width: 100%;
+                padding: 0.85rem;
+            }
+
+            .destinations-grid {
+                grid-template-columns: 1fr;
+                max-width: 420px;
+                margin: 0 auto;
+            }
+
+            .how-steps {
+                grid-template-columns: 1fr;
+                max-width: 360px;
+                margin: 0 auto;
+            }
+
+            .how-connector {
+                display: none !important;
+            }
+
+            .reviews-grid {
+                grid-template-columns: 1fr;
+                max-width: 420px;
+                margin: 0 auto;
+            }
+
+            .newsletter-form {
+                flex-direction: column;
+            }
+
+            .newsletter-form button {
+                width: 100%;
+            }
+
+            .footer-top {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .footer-brand p {
+                margin: 0.75rem auto 1.5rem;
+            }
+
+            .footer-socials {
+                justify-content: center;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                gap: 0.75rem;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 1.25rem;
+            }
+
+            .dest-card-img {
+                height: 220px;
+            }
+        }
+
+        /* ========== AUTH MODALS ========== */
+        .auth-overlay {
+            position: fixed; inset: 0;
+            background: rgba(13,27,42,0.8);
+            backdrop-filter: blur(10px);
+            z-index: 20000;
+            display: flex; align-items: center; justify-content: center;
+            opacity: 0; pointer-events: none;
+            transition: opacity 0.35s var(--ease-out);
+        }
+        .auth-overlay.active { opacity: 1; pointer-events: auto; }
+        .auth-box {
+            background: var(--cream); border-radius: 1.25rem;
+            padding: 2.5rem; width: 90%; max-width: 440px;
+            position: relative;
+            transform: translateY(30px) scale(0.96);
+            transition: all 0.45s var(--ease-spring);
+            box-shadow: 0 32px 64px rgba(0,0,0,0.2);
+        }
+        .auth-overlay.active .auth-box { transform: translateY(0) scale(1); }
+        .auth-close {
+            position: absolute; top: 1.25rem; right: 1.25rem;
+            background: var(--white); border: none;
+            width: 36px; height: 36px; border-radius: 50%;
+            display: grid; place-items: center;
+            cursor: none; font-size: 1rem; color: var(--text-primary);
+            transition: all 0.3s; box-shadow: var(--shadow-sm);
+        }
+        .auth-close:hover { background: var(--gold); color: var(--navy); transform: rotate(90deg); }
+        .auth-logo { font-family: var(--font-display); font-size: 1.75rem; color: var(--text-primary); text-align: center; margin-bottom: 0.25rem; }
+        .auth-logo span { color: var(--gold); }
+        .auth-tagline { text-align: center; color: var(--text-muted); font-size: 0.82rem; margin-bottom: 2rem; }
+        .auth-form-group { margin-bottom: 1.1rem; }
+        .auth-form-group label { display: block; font-size: 0.78rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 0.4rem; text-transform: uppercase; letter-spacing: 0.06em; }
+        .auth-input-wrap { position: relative; }
+        .auth-input-wrap i { position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 0.9rem; }
+        .auth-input {
+            width: 100%; padding: 0.825rem 1rem 0.825rem 2.75rem;
+            border: 1.5px solid var(--outline); border-radius: 0.5rem;
+            background: var(--white); color: var(--text-primary);
+            font-size: 0.9rem; font-family: var(--font-body);
+            transition: all 0.3s; outline: none;
+        }
+        .auth-input:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(201,168,76,0.12); }
+        .auth-btn-primary {
+            width: 100%; padding: 0.9rem; background: var(--navy); color: white;
+            border: none; border-radius: 0.5rem; font-size: 0.9rem; font-weight: 600;
+            font-family: var(--font-body); cursor: pointer; transition: all 0.3s;
+            margin-top: 0.5rem; letter-spacing: 0.02em;
+        }
+        .auth-btn-primary:hover { background: var(--navy-mid); transform: translateY(-1px); box-shadow: var(--shadow-md); }
+        .auth-switch { text-align: center; margin-top: 1.25rem; font-size: 0.82rem; color: var(--text-muted); }
+        .auth-switch a { color: var(--gold-muted); font-weight: 600; cursor: pointer; }
+        .auth-switch a:hover { color: var(--gold); }
+        .auth-error { color: var(--error); font-size: 0.8rem; text-align: center; min-height: 1.2rem; margin-top: 0.5rem; }
+
+        /* ========== NAV AUTH BUTTONS ========== */
+        .nav-auth-login {
+            font-size: 0.875rem; font-weight: 500;
+            color: rgba(255,255,255,0.85);
+            letter-spacing: 0.02em; transition: color 0.3s;
+        }
+        .navbar.scrolled .nav-auth-login { color: var(--text-secondary); }
+        .nav-auth-login:hover { color: var(--gold) !important; }
+        .nav-user-btn {
+            display: flex; align-items: center; gap: 0.5rem;
+            font-size: 0.82rem; font-weight: 600;
+            color: rgba(255,255,255,0.85);
+            padding: 0.45rem 1rem;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 2rem;
+            transition: all 0.3s;
+            cursor: none;
+        }
+        .nav-user-btn:hover { border-color: var(--gold); color: var(--gold) !important; }
+        .navbar.scrolled .nav-user-btn { color: var(--text-secondary); border-color: var(--outline); }
+        .nav-logout-btn {
+            font-size: 0.78rem; font-weight: 600;
+            color: rgba(255,255,255,0.5);
+            cursor: none; transition: color 0.3s;
+        }
+        .nav-logout-btn:hover { color: var(--error) !important; }
+        .navbar.scrolled .nav-logout-btn { color: var(--text-muted); }
+
+        /* ========== DASHBOARD PANEL ========== */
+        .dashboard-overlay {
+            position: fixed; inset: 0;
+            background: rgba(13,27,42,0.6); backdrop-filter: blur(8px);
+            z-index: 15000; opacity: 0; pointer-events: none;
+            transition: opacity 0.4s var(--ease-out);
+        }
+        .dashboard-overlay.active { opacity: 1; pointer-events: auto; }
+        .dashboard-panel {
+            position: fixed; top: 0; right: 0;
+            width: min(520px, 100vw); height: 100vh;
+            background: var(--cream); z-index: 15001;
+            overflow-y: auto; transform: translateX(100%);
+            transition: transform 0.5s var(--ease-spring);
+            box-shadow: -20px 0 60px rgba(0,0,0,0.2);
+        }
+        .dashboard-overlay.active .dashboard-panel { transform: translateX(0); }
+        .dash-header {
+            background: var(--navy); padding: 2rem;
+            position: sticky; top: 0; z-index: 10;
+        }
+        .dash-close {
+            position: absolute; top: 1.25rem; right: 1.25rem;
+            background: rgba(255,255,255,0.1); border: none;
+            width: 36px; height: 36px; border-radius: 50%;
+            display: grid; place-items: center; cursor: none;
+            color: rgba(255,255,255,0.7); font-size: 1rem; transition: all 0.3s;
+        }
+        .dash-close:hover { background: rgba(255,255,255,0.2); color: white; }
+        .dash-avatar {
+            width: 64px; height: 64px; border-radius: 50%;
+            background: linear-gradient(135deg, var(--gold), var(--gold-muted));
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.5rem; font-weight: 700; color: var(--navy);
+            margin-bottom: 1rem;
+        }
+        .dash-user-name { font-family: var(--font-display); font-size: 1.5rem; color: white; margin-bottom: 0.25rem; }
+        .dash-user-email { font-size: 0.82rem; color: rgba(255,255,255,0.5); margin-bottom: 1rem; }
+        .dash-stats {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem;
+        }
+        .dash-stat {
+            background: rgba(255,255,255,0.07); border-radius: 0.625rem;
+            padding: 0.875rem 0.75rem; text-align: center;
+        }
+        .dash-stat-val { font-size: 1.3rem; font-weight: 700; color: var(--gold); }
+        .dash-stat-lbl { font-size: 0.68rem; color: rgba(255,255,255,0.45); text-transform: uppercase; letter-spacing: 0.06em; }
+        .dash-tabs {
+            display: flex; border-bottom: 1px solid var(--outline);
+            padding: 0 1.5rem; background: var(--white);
+        }
+        .dash-tab {
+            padding: 1rem 1.25rem; font-size: 0.82rem; font-weight: 600;
+            color: var(--text-muted); cursor: pointer; border-bottom: 2px solid transparent;
+            transition: all 0.3s; background: none; border-top: none; border-left: none; border-right: none;
+            font-family: var(--font-body); white-space: nowrap;
+        }
+        .dash-tab.active { color: var(--navy); border-bottom-color: var(--gold); }
+        .dash-body { padding: 1.5rem; }
+        .dash-tab-pane { display: none; }
+        .dash-tab-pane.active { display: block; }
+        .section-label { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold-muted); margin-bottom: 1rem; }
+        .trip-card {
+            background: var(--white); border-radius: 0.75rem; overflow: hidden;
+            display: flex; align-items: center; gap: 1rem;
+            padding: 1rem; margin-bottom: 0.875rem;
+            transition: all 0.3s; border: 1px solid var(--outline);
+        }
+        .trip-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+        .trip-thumb { width: 64px; height: 64px; border-radius: 0.5rem; object-fit: cover; flex-shrink: 0; }
+        .trip-thumb-placeholder { width: 64px; height: 64px; border-radius: 0.5rem; background: var(--cream-mid); display: grid; place-items: center; font-size: 1.5rem; flex-shrink: 0; }
+        .trip-info { flex: 1; min-width: 0; }
+        .trip-name { font-weight: 600; font-size: 0.9rem; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .trip-date { font-size: 0.78rem; color: var(--text-muted); margin: 0.2rem 0; }
+        .trip-status { display: inline-block; padding: 0.2rem 0.6rem; border-radius: 2rem; font-size: 0.68rem; font-weight: 600; text-transform: uppercase; }
+        .trip-status.confirmed { background: rgba(42,122,75,0.1); color: #2a7a4b; }
+        .trip-status.pending { background: rgba(201,168,76,0.12); color: var(--gold-muted); }
+        .trip-status.cancelled { background: rgba(186,26,26,0.08); color: var(--error); }
+        .trip-cancel-btn {
+            background: none; border: 1px solid var(--outline); border-radius: 0.375rem;
+            padding: 0.35rem 0.75rem; font-size: 0.72rem; font-family: var(--font-body);
+            color: var(--text-muted); cursor: pointer; transition: all 0.3s; white-space: nowrap;
+        }
+        .trip-cancel-btn:hover { border-color: var(--error); color: var(--error); }
+        .payment-row {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 1rem; background: var(--white); border-radius: 0.625rem;
+            margin-bottom: 0.75rem; border: 1px solid var(--outline);
+        }
+        .payment-dest { font-weight: 600; font-size: 0.88rem; color: var(--text-primary); }
+        .payment-date { font-size: 0.75rem; color: var(--text-muted); }
+        .payment-amount { font-weight: 700; color: var(--navy); font-size: 0.95rem; }
+        .saved-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.875rem; }
+        .saved-card {
+            border-radius: 0.625rem; overflow: hidden;
+            background: var(--white); border: 1px solid var(--outline);
+            transition: all 0.3s; cursor: pointer;
+        }
+        .saved-card:hover { box-shadow: var(--shadow-md); transform: translateY(-3px); }
+        .saved-card img { width: 100%; height: 100px; object-fit: cover; }
+        .saved-card-info { padding: 0.75rem; }
+        .saved-card-name { font-weight: 600; font-size: 0.85rem; color: var(--text-primary); }
+        .saved-card-country { font-size: 0.72rem; color: var(--text-muted); }
+        .dash-empty { text-align: center; padding: 2.5rem 1rem; color: var(--text-muted); }
+        .dash-empty i { font-size: 2.5rem; margin-bottom: 0.75rem; display: block; opacity: 0.3; }
+
+        /* ========== TOAST ========== */
+        .toast-container { position: fixed; bottom: 2rem; right: 2rem; z-index: 30000; display: flex; flex-direction: column; gap: 0.75rem; }
+        .toast {
+            padding: 1rem 1.5rem; background: var(--navy); color: white;
+            border-radius: 0.75rem; font-size: 0.875rem; font-weight: 500;
+            display: flex; align-items: center; gap: 0.75rem;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+            transform: translateX(120%); opacity: 0;
+            transition: all 0.45s var(--ease-spring);
+            min-width: 260px; max-width: 360px;
+        }
+        .toast.show { transform: translateX(0); opacity: 1; }
+        .toast i { font-size: 1rem; }
+        .toast.success { border-left: 4px solid #2a7a4b; }
+        .toast.error { border-left: 4px solid var(--error); }
+        .toast.info { border-left: 4px solid var(--gold); }
+
+        /* ========== ENHANCED MODAL — SAVE BTN ========== */
+        .modal-save-btn {
+            position: absolute; top: 1rem; left: 1rem; z-index: 3;
+            background: rgba(13,27,42,0.7); backdrop-filter: blur(8px);
+            border: none; border-radius: 50%; width: 44px; height: 44px;
+            display: grid; place-items: center; cursor: none;
+            color: white; font-size: 1.2rem; transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        .modal-save-btn.saved { background: rgba(201,168,76,0.9); color: var(--navy); }
+        .modal-save-btn:hover { transform: scale(1.1); }
+
+        /* ========== MODAL SECTIONS ========== */
+        .modal-weather { display: flex; align-items: center; gap: 0.75rem; padding: 1rem 1.25rem; background: linear-gradient(135deg, rgba(13,27,42,0.04), rgba(201,168,76,0.06)); border-radius: 0.625rem; margin-bottom: 1.5rem; font-size: 0.875rem; color: var(--text-secondary); }
+        .weather-icon { font-size: 1.75rem; }
+        .weather-temp { font-size: 1.25rem; font-weight: 700; color: var(--text-primary); }
+        .weather-desc { font-size: 0.78rem; color: var(--text-muted); }
+        .modal-section { margin-bottom: 2rem; }
+        .modal-section-title { font-family: var(--font-body); font-size: 0.72rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold-muted); margin-bottom: 1rem; }
+        .tips-list { list-style: none; }
+        .tips-list li { padding: 0.6rem 0; border-bottom: 1px solid var(--outline); font-size: 0.88rem; color: var(--text-secondary); display: flex; align-items: flex-start; gap: 0.5rem; }
+        .tips-list li:last-child { border-bottom: none; }
+        .foods-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+        .food-chip { padding: 0.6rem 0.875rem; background: var(--surface); border-radius: 0.5rem; font-size: 0.82rem; color: var(--text-secondary); border: 1px solid var(--outline); transition: all 0.3s; }
+        .food-chip:hover { background: var(--gold); color: var(--navy); border-color: var(--gold); }
+        .budget-bars { display: flex; flex-direction: column; gap: 0.625rem; }
+        .budget-item { display: flex; align-items: center; gap: 0.75rem; font-size: 0.82rem; }
+        .budget-label { width: 120px; color: var(--text-secondary); flex-shrink: 0; }
+        .budget-bar-wrap { flex: 1; height: 8px; background: var(--cream-dark); border-radius: 4px; overflow: hidden; }
+        .budget-bar { height: 100%; background: linear-gradient(90deg, var(--gold-muted), var(--gold)); border-radius: 4px; transition: width 1s var(--ease-out); }
+        .budget-amount { width: 65px; text-align: right; font-weight: 600; color: var(--text-primary); flex-shrink: 0; }
+        .modal-map { margin-bottom: 2rem; }
+        .modal-map iframe { width: 100%; height: 220px; border: none; border-radius: 0.625rem; }
+
+        /* ========== BOOKING SECTION ========== */
+        .booking-section {
+            background: linear-gradient(135deg, var(--navy), var(--navy-mid));
+            border-radius: 0.875rem; padding: 1.75rem;
+            margin-bottom: 2rem;
+        }
+        .booking-section-title { font-family: var(--font-display); font-size: 1.25rem; color: white; margin-bottom: 0.5rem; }
+        .booking-section-sub { font-size: 0.82rem; color: rgba(255,255,255,0.5); margin-bottom: 1.5rem; }
+        .booking-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.25rem; }
+        .booking-field label { display: block; font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(255,255,255,0.5); margin-bottom: 0.4rem; }
+        .booking-input {
+            width: 100%; padding: 0.75rem 0.875rem;
+            background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 0.5rem; color: white; font-size: 0.88rem;
+            font-family: var(--font-body); outline: none; transition: all 0.3s;
+        }
+        .booking-input:focus { border-color: var(--gold); background: rgba(255,255,255,0.12); }
+        .booking-input option { color: var(--text-primary); background: white; }
+        .booking-total { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; padding: 0.875rem; background: rgba(255,255,255,0.06); border-radius: 0.5rem; }
+        .booking-total-label { font-size: 0.82rem; color: rgba(255,255,255,0.5); }
+        .booking-total-val { font-size: 1.25rem; font-weight: 700; color: var(--gold); }
+        .btn-book-now {
+            width: 100%; padding: 1rem; background: var(--gold); color: var(--navy);
+            border: none; border-radius: 0.5rem; font-size: 0.9rem; font-weight: 700;
+            font-family: var(--font-body); cursor: pointer; transition: all 0.3s;
+            letter-spacing: 0.04em;
+        }
+        .btn-book-now:hover { background: var(--gold-light); transform: translateY(-1px); }
+        .btn-book-now:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+        .stripe-wrapper { margin-top: 1rem; }
+        .stripe-card-el { padding: 0.875rem; background: rgba(255,255,255,0.95); border-radius: 0.5rem; }
+        .btn-pay {
+            width: 100%; padding: 1rem; background: #2a7a4b; color: white;
+            border: none; border-radius: 0.5rem; font-size: 0.9rem; font-weight: 700;
+            font-family: var(--font-body); cursor: pointer; transition: all 0.3s; margin-top: 0.875rem;
+        }
+        .btn-pay:hover { background: #1e5c37; }
+        .btn-pay:disabled { opacity: 0.5; cursor: not-allowed; }
+        .demo-notice { font-size: 0.72rem; color: rgba(255,255,255,0.4); text-align: center; margin-top: 0.625rem; }
+
+        /* ========== REVIEW FORM ========== */
+        .review-form-section { border-top: 1px solid var(--outline); padding-top: 2rem; margin-top: 2rem; }
+        .star-picker { display: flex; gap: 0.375rem; margin-bottom: 1rem; }
+        .star-picker i { font-size: 1.5rem; color: var(--outline); cursor: pointer; transition: color 0.2s; }
+        .star-picker i.lit { color: var(--gold); }
+        .review-textarea {
+            width: 100%; padding: 0.875rem; border: 1.5px solid var(--outline);
+            border-radius: 0.5rem; font-size: 0.88rem; font-family: var(--font-body);
+            color: var(--text-primary); background: var(--white); resize: vertical;
+            min-height: 100px; outline: none; transition: border 0.3s;
+        }
+        .review-textarea:focus { border-color: var(--gold); }
+        .btn-submit-review {
+            padding: 0.75rem 2rem; background: var(--navy); color: white;
+            border: none; border-radius: 0.5rem; font-size: 0.85rem; font-weight: 600;
+            font-family: var(--font-body); cursor: pointer; transition: all 0.3s; margin-top: 0.75rem;
+        }
+        .btn-submit-review:hover { background: var(--navy-mid); }
+        .user-review-card {
+            background: var(--surface); border-radius: 0.625rem; padding: 1.25rem;
+            margin-bottom: 0.875rem; border: 1px solid var(--outline);
+        }
+        .user-review-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem; }
+        .user-review-name { font-weight: 600; font-size: 0.875rem; color: var(--text-primary); }
+        .user-review-stars { color: var(--gold); font-size: 0.75rem; }
+        .user-review-text { font-size: 0.875rem; color: var(--text-secondary); line-height: 1.7; }
+        .user-review-date { font-size: 0.72rem; color: var(--text-muted); margin-top: 0.5rem; }
+
+        /* ========== AI RECOMMENDATION WIDGET ========== */
+        .ai-widget-btn {
+            position: fixed; bottom: 2rem; left: 2rem; z-index: 5000;
+            background: var(--navy); color: var(--gold);
+            width: 56px; height: 56px; border-radius: 50%;
+            border: none; font-size: 1.2rem; cursor: pointer;
+            box-shadow: 0 8px 24px rgba(13,27,42,0.3);
+            transition: all 0.35s var(--ease-spring);
+            display: flex; align-items: center; justify-content: center;
+        }
+        .ai-widget-btn:hover { transform: scale(1.1) rotate(15deg); background: var(--gold); color: var(--navy); }
+        .ai-panel {
+            position: fixed; bottom: 5.5rem; left: 2rem; z-index: 5000;
+            background: var(--cream); border-radius: 1rem; padding: 1.5rem;
+            width: 300px; box-shadow: 0 20px 48px rgba(0,0,0,0.15);
+            border: 1px solid var(--outline);
+            transform: translateY(20px) scale(0.9); opacity: 0; pointer-events: none;
+            transition: all 0.4s var(--ease-spring);
+        }
+        .ai-panel.open { transform: translateY(0) scale(1); opacity: 1; pointer-events: auto; }
+        .ai-panel-title { font-family: var(--font-display); font-size: 1.1rem; color: var(--navy); margin-bottom: 0.25rem; }
+        .ai-panel-sub { font-size: 0.75rem; color: var(--text-muted); margin-bottom: 1.25rem; }
+        .ai-field { margin-bottom: 1rem; }
+        .ai-field label { display: block; font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--gold-muted); margin-bottom: 0.4rem; }
+        .ai-select, .ai-range { width: 100%; padding: 0.6rem 0.875rem; border: 1.5px solid var(--outline); border-radius: 0.5rem; font-family: var(--font-body); font-size: 0.85rem; color: var(--text-primary); background: var(--white); outline: none; }
+        .ai-range { padding: 0.4rem 0; border: none; accent-color: var(--gold); }
+        .ai-budget-display { font-size: 0.75rem; color: var(--text-muted); text-align: right; margin-top: -0.5rem; margin-bottom: 0.5rem; }
+        .btn-ai-recommend { width: 100%; padding: 0.7rem; background: var(--gold); color: var(--navy); border: none; border-radius: 0.5rem; font-weight: 700; font-size: 0.82rem; cursor: pointer; font-family: var(--font-body); transition: all 0.3s; margin-top: 0.5rem; }
+        .btn-ai-recommend:hover { background: var(--gold-light); }
+        .ai-results { margin-top: 1rem; }
+        .ai-result-card {
+            display: flex; gap: 0.75rem; align-items: center;
+            padding: 0.75rem; background: var(--white); border-radius: 0.5rem;
+            margin-bottom: 0.5rem; cursor: pointer; transition: all 0.3s;
+            border: 1px solid var(--outline);
+        }
+        .ai-result-card:hover { box-shadow: var(--shadow-md); transform: translateY(-1px); }
+        .ai-result-img { width: 48px; height: 48px; border-radius: 0.375rem; object-fit: cover; flex-shrink: 0; }
+        .ai-result-name { font-weight: 600; font-size: 0.82rem; color: var(--text-primary); }
+        .ai-result-price { font-size: 0.72rem; color: var(--text-muted); }
+    </style>
+</head>
+
+<body>
+
+    <div class="cursor-dot" id="cursorDot"></div>
+    <div class="cursor-outline" id="cursorOutline"></div>
+
+    <!-- ===== NAVBAR ===== -->
+    <nav class="navbar" id="navbar">
+        <div class="container">
+            <a href="#" class="nav-logo">Wan<span>der</span></a>
+            <ul class="nav-links">
+                <li><a href="#hero">Home</a></li>
+                <li><a href="#destinations">Destinations</a></li>
+                <li><a href="#how-it-works">Planner</a></li>
+                <li><a href="#reviews">About</a></li>
+                <li><button class="theme-toggle" id="themeToggle" aria-label="Toggle Theme"><i class="fas fa-moon"></i></button></li>
+                <li id="navGuestItems">
+                    <a href="#" class="nav-auth-login" id="navLoginBtn" onclick="openLoginModal();return false;">Login</a>
+                    <a href="#" class="nav-cta" style="margin-left:0.75rem" id="navSignupBtn" onclick="openSignupModal();return false;">Sign Up</a>
+                </li>
+                <li id="navUserItems" style="display:none">
+                    <a href="#" class="nav-user-btn" id="navDashboardBtn" onclick="openDashboard();return false;">
+                        <i class="fas fa-user-circle"></i> <span id="navUserName">Guest</span>
+                    </a>
+                    <a href="#" class="nav-logout-btn" style="margin-left:0.875rem" onclick="handleLogout();return false;">Logout</a>
+                </li>
+            </ul>
+            <div class="hamburger" id="hamburger" aria-label="Toggle menu" role="button" tabindex="0">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ===== MOBILE MENU ===== -->
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="#hero" class="mobile-link">Home</a>
+        <a href="#destinations" class="mobile-link">Destinations</a>
+        <a href="#how-it-works" class="mobile-link">Planner</a>
+        <a href="#reviews" class="mobile-link">About</a>
+        <a href="#newsletter" class="nav-cta mobile-link">Plan a Trip</a>
+    </div>
+
+    <!-- ===== HERO ===== -->
+    <section class="hero" id="hero">
+        <div class="hero-bg" id="heroBg"></div>
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <div class="hero-kicker">Curated Luxury Journeys</div>
+            <h1>Discover the World's <em>Hidden</em> Wonders</h1>
+            <p class="hero-subtitle">Handpicked destinations, bespoke itineraries, and unforgettable experiences crafted
+                for the discerning traveler.</p>
+            <div class="hero-search">
+                <i class="fas fa-search"></i>
+                <input type="text" id="searchInput" placeholder="Where do you want to go?" autocomplete="off">
+                <button type="button">Search</button>
+            </div>
+        </div>
+        <div class="hero-scroll-hint">
+            <span>Scroll to explore</span>
+            <i class="fas fa-chevron-down"></i>
+        </div>
+    </section>
+
+    <!-- ===== DESTINATIONS ===== -->
+    <section class="destinations" id="destinations">
+        <div class="container">
+            <div class="destinations-header reveal">
+                <span class="section-kicker">Featured Destinations</span>
+                <h2 class="section-title">Where Will Your Story Begin?</h2>
+                <p class="section-subtitle">From sun-kissed coastlines to ancient cities steeped in history — each
+                    destination is handpicked by our editorial team.</p>
+            </div>
+            <div class="dest-filters reveal" id="destFilters">
+                <div class="filter-chips" id="filterChips">
+                    <button class="filter-chip active" data-category="">All Highlights</button>
+                    <button class="filter-chip" data-category="Beach">Beach & Sun</button>
+                    <button class="filter-chip" data-category="Culture">Culture</button>
+                    <button class="filter-chip" data-category="Mountain">Mountains</button>
+                    <button class="filter-chip" data-category="Romance">Romance</button>
+                </div>
+                <select class="filter-sort" id="sortSelect">
+                    <option value="rating_desc">Highest Rated</option>
+                    <option value="cost_asc">Price: Low to High</option>
+                    <option value="cost_desc">Price: High to Low</option>
+                </select>
+            </div>
+            <div class="destinations-grid" id="destinationsGrid">
+                <!-- Populated dynamically from API -->
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== EXPERIENCES ===== -->
+    <section class="experiences" id="experiences">
+        <div class="container">
+            <div class="experiences-header reveal">
+                <span class="section-kicker">Popular Experiences</span>
+                <h2 class="section-title">Travel Your Way</h2>
+                <p class="section-subtitle">From adrenaline-fueled adventures to serene cultural immersions — find the
+                    experience that speaks to you.</p>
+            </div>
+        </div>
+        <div class="experiences-scroll" id="experiencesScroll">
+            <!-- Populated dynamically from API -->
+        </div>
+    </section>
+
+    <!-- ===== HOW IT WORKS ===== -->
+    <section class="how-it-works" id="how-it-works">
+        <div class="container">
+            <div class="how-header reveal">
+                <span class="section-kicker">How It Works</span>
+                <h2 class="section-title">Three Steps to Your Dream Trip</h2>
+                <p class="section-subtitle">We've distilled the art of travel planning into a simple, elegant process.
+                </p>
+            </div>
+            <div class="how-steps">
+                <div class="how-step reveal">
+                    <span class="how-step-number">01</span>
+                    <div class="how-step-icon"><i class="fas fa-compass"></i></div>
+                    <h3>Discover</h3>
+                    <p>Browse our curated collection of destinations and experiences, each vetted by seasoned travelers.
+                    </p>
+                    <div class="how-connector"></div>
+                </div>
+                <div class="how-step reveal">
+                    <span class="how-step-number">02</span>
+                    <div class="how-step-icon"><i class="fas fa-map-marked-alt"></i></div>
+                    <h3>Design</h3>
+                    <p>Work with our concierge team to craft a bespoke itinerary tailored to your vision and pace.</p>
+                    <div class="how-connector"></div>
+                </div>
+                <div class="how-step reveal">
+                    <span class="how-step-number">03</span>
+                    <div class="how-step-icon"><i class="fas fa-plane-departure"></i></div>
+                    <h3>Depart</h3>
+                    <p>Pack your bags. Every detail — from transfers to reservations — is arranged seamlessly for you.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== REVIEWS ===== -->
+    <section class="reviews" id="reviews">
+        <div class="container">
+            <div class="reviews-header reveal">
+                <span class="section-kicker">Traveler Stories</span>
+                <h2 class="section-title">What Our Travelers Say</h2>
+                <p class="section-subtitle">Real stories from real adventurers who trusted us with their most memorable
+                    journeys.</p>
+            </div>
+            <div class="reviews-grid" id="reviewsGrid">
+                <!-- Populated dynamically from API -->
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== NEWSLETTER ===== -->
+    <section class="newsletter" id="newsletter">
+        <div class="container">
+            <div class="newsletter-inner reveal">
+                <span class="section-kicker">Stay Inspired</span>
+                <h2 class="section-title">Get Our Weekly Travel Edit</h2>
+                <p class="newsletter-subtitle">Exclusive destination guides, limited-time offers, and the stories behind
+                    the world's most beautiful places.</p>
+                <form class="newsletter-form" id="newsletterForm">
+                    <input type="email" placeholder="Your email address" required autocomplete="email">
+                    <button type="submit">Subscribe</button>
+                </form>
+                <p class="newsletter-note">No spam. Unsubscribe anytime. We respect your inbox.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="footer" id="footer">
+        <div class="container">
+            <div class="footer-top">
+                <div class="footer-brand">
+                    <a href="#" class="nav-logo">Wan<span>der</span></a>
+                    <p>Curating the world's most extraordinary travel experiences since 2018. Every journey tells a
+                        story.</p>
+                    <div class="footer-socials">
+                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" aria-label="Twitter"><i class="fab fa-x-twitter"></i></a>
+                        <a href="#" aria-label="Pinterest"><i class="fab fa-pinterest-p"></i></a>
+                        <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>Explore</h4>
+                    <a href="#">Destinations</a>
+                    <a href="#">Experiences</a>
+                    <a href="#">Travel Guides</a>
+                    <a href="#">Last Minute Deals</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Company</h4>
+                    <a href="#">About Us</a>
+                    <a href="#">Our Team</a>
+                    <a href="#">Careers</a>
+                    <a href="#">Press</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Support</h4>
+                    <a href="#">Help Center</a>
+                    <a href="#">Contact Us</a>
+                    <a href="#">Travel Insurance</a>
+                    <a href="#">Cancellation Policy</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Wander. All rights reserved.</p>
+                <div class="footer-bottom-links">
+                    <a href="#">Privacy</a>
+                    <a href="#">Terms</a>
+                    <a href="#">Cookies</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ===== DESTINATION MODAL ===== -->
+    <div class="modal-overlay" id="destModalOverlay">
+        <div class="modal" id="destModal">
+            <button class="modal-close" id="modalClose"><i class="fas fa-times"></i></button>
+            <div class="modal-hero" style="position:relative">
+                <img id="modalImg" src="" alt="Destination image">
+                <button class="modal-save-btn" id="modalSaveBtn" onclick="toggleSaveDestination()" title="Save to wishlist">
+                    <i class="far fa-heart" id="modalSaveIcon"></i>
+                </button>
+            </div>
+            <div class="modal-content">
+                <h2 class="modal-title" id="modalTitle">City Name</h2>
+                <div class="modal-meta">
+                    <div><i class="fas fa-wallet"></i><span id="modalCost">--</span></div>
+                    <div><i class="fas fa-star"></i><span id="modalRating">--</span></div>
+                    <div><i class="fas fa-tag"></i><span id="modalCat">--</span></div>
+                    <div><i class="fas fa-calendar-alt"></i><span id="modalSeason">--</span></div>
+                </div>
+                <p id="modalDesc" style="line-height:1.8; margin-bottom: 1.5rem; color: var(--text-secondary); font-size: 0.95rem;"></p>
+
+                <!-- Weather Strip -->
+                <div class="modal-weather" id="modalWeather" style="display:none">
+                    <span class="weather-icon" id="weatherIcon">🌤️</span>
+                    <div>
+                        <div style="display:flex;align-items:baseline;gap:0.5rem">
+                            <span class="weather-temp" id="weatherTemp">--°C</span>
+                            <span class="weather-desc" id="weatherDesc">Loading…</span>
+                        </div>
+                        <div style="font-size:0.72rem;color:var(--text-muted)" id="weatherCity"></div>
+                    </div>
+                </div>
+
+                <!-- Map -->
+                <div class="modal-section modal-map" id="modalMapSection">
+                    <div class="modal-section-title">📍 Location</div>
+                    <iframe id="modalMapFrame" src="" loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade"></iframe>
+                </div>
+
+                <!-- Travel Tips -->
+                <div class="modal-section" id="modalTipsSection">
+                    <div class="modal-section-title">💡 Insider Travel Tips</div>
+                    <ul class="tips-list" id="modalTipsList"></ul>
+                </div>
+
+                <!-- Local Food -->
+                <div class="modal-section">
+                    <div class="modal-section-title">🍽️ Local Food to Try</div>
+                    <div class="foods-grid" id="modalFoodsGrid"></div>
+                </div>
+
+                <!-- Budget Breakdown -->
+                <div class="modal-section">
+                    <div class="modal-section-title">💰 Budget Breakdown (per person)</div>
+                    <div class="budget-bars" id="modalBudgetBars"></div>
+                </div>
+
+                <!-- Traveler Reviews (CSV) -->
+                <div class="modal-section">
+                    <div class="modal-section-title">⭐ Traveler Experiences</div>
+                    <div class="reviews-grid" id="modalReviews" style="grid-template-columns: 1fr 1fr; gap: 1.5rem;"></div>
+                </div>
+
+                <!-- User Reviews (DB) -->
+                <div class="modal-section" id="modalUserReviewsSection">
+                    <div class="modal-section-title">📝 Community Reviews</div>
+                    <div id="modalUserReviews"></div>
+                </div>
+
+                <!-- Booking Section -->
+                <div class="booking-section" id="modalBookingSection">
+                    <div class="booking-section-title">Book This Destination</div>
+                    <div class="booking-section-sub">Secure your spot — fully refundable within 48 hours.</div>
+                    <div class="booking-fields">
+                        <div class="booking-field">
+                            <label>Travel Date</label>
+                            <input type="date" id="bookingDate" class="booking-input">
+                        </div>
+                        <div class="booking-field">
+                            <label>Guests</label>
+                            <select id="bookingGuests" class="booking-input">
+                                <option value="1">1 Guest</option>
+                                <option value="2">2 Guests</option>
+                                <option value="3">3 Guests</option>
+                                <option value="4">4 Guests</option>
+                                <option value="5">5 Guests</option>
+                                <option value="6">6+ Guests</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="booking-total">
+                        <span class="booking-total-label">Estimated Total</span>
+                        <span class="booking-total-val" id="bookingTotal">$0</span>
+                    </div>
+                    <button class="btn-book-now" id="btnBookNow" onclick="handleBookNow()">🗺️ Book Now</button>
+                    <!-- Payment (shown after booking created) -->
+                    <div class="stripe-wrapper" id="stripeWrapper" style="display:none">
+                        <div class="stripe-card-el" id="stripeCard"></div>
+                        <button class="btn-pay" id="btnPay" onclick="handlePay()">🔒 Confirm & Pay <span id="payBtnAmount"></span></button>
+                        <div class="demo-notice" id="demoNotice">🔒 Demo mode — no real payment processed</div>
+                    </div>
+                </div>
+
+                <!-- Review Form -->
+                <div class="review-form-section" id="modalReviewForm" style="display:none">
+                    <div class="modal-section-title">✍️ Write a Review</div>
+                    <div class="star-picker" id="starPicker">
+                        <i class="far fa-star" data-val="1"></i>
+                        <i class="far fa-star" data-val="2"></i>
+                        <i class="far fa-star" data-val="3"></i>
+                        <i class="far fa-star" data-val="4"></i>
+                        <i class="far fa-star" data-val="5"></i>
+                    </div>
+                    <textarea class="review-textarea" id="reviewText" placeholder="Share your experience with fellow travelers…"></textarea>
+                    <button class="btn-submit-review" onclick="submitReview()">Submit Review</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== LOGIN MODAL ===== -->
+    <div class="auth-overlay" id="loginOverlay">
+        <div class="auth-box">
+            <button class="auth-close" onclick="closeLoginModal()"><i class="fas fa-times"></i></button>
+            <div style="text-align:center;margin-bottom:1.5rem">
+                <div class="auth-logo">Wan<span>der</span></div>
+                <div class="auth-tagline">Welcome back, traveler</div>
+            </div>
+            <div class="auth-form-group">
+                <label>Email Address</label>
+                <div class="auth-input-wrap">
+                    <i class="fas fa-envelope"></i>
+                    <input class="auth-input" type="email" id="loginEmail" placeholder="you@example.com" autocomplete="email">
+                </div>
+            </div>
+            <div class="auth-form-group">
+                <label>Password</label>
+                <div class="auth-input-wrap">
+                    <i class="fas fa-lock"></i>
+                    <input class="auth-input" type="password" id="loginPassword" placeholder="••••••••" autocomplete="current-password">
+                </div>
+            </div>
+            <button class="auth-btn-primary" onclick="handleLogin()">Sign In</button>
+            <div class="auth-error" id="loginError"></div>
+            <div class="auth-switch">No account? <a onclick="closeLoginModal();openSignupModal();">Create one free</a></div>
+        </div>
+    </div>
+
+    <!-- ===== SIGNUP MODAL ===== -->
+    <div class="auth-overlay" id="signupOverlay">
+        <div class="auth-box">
+            <button class="auth-close" onclick="closeSignupModal()"><i class="fas fa-times"></i></button>
+            <div style="text-align:center;margin-bottom:1.5rem">
+                <div class="auth-logo">Wan<span>der</span></div>
+                <div class="auth-tagline">Start your journey today</div>
+            </div>
+            <div class="auth-form-group">
+                <label>Full Name</label>
+                <div class="auth-input-wrap">
+                    <i class="fas fa-user"></i>
+                    <input class="auth-input" type="text" id="signupName" placeholder="Jane Doe" autocomplete="name">
+                </div>
+            </div>
+            <div class="auth-form-group">
+                <label>Email Address</label>
+                <div class="auth-input-wrap">
+                    <i class="fas fa-envelope"></i>
+                    <input class="auth-input" type="email" id="signupEmail" placeholder="you@example.com" autocomplete="email">
+                </div>
+            </div>
+            <div class="auth-form-group">
+                <label>Password</label>
+                <div class="auth-input-wrap">
+                    <i class="fas fa-lock"></i>
+                    <input class="auth-input" type="password" id="signupPassword" placeholder="Min. 6 characters" autocomplete="new-password">
+                </div>
+            </div>
+            <button class="auth-btn-primary" onclick="handleSignup()">Create Account</button>
+            <div class="auth-error" id="signupError"></div>
+            <div class="auth-switch">Already have an account? <a onclick="closeSignupModal();openLoginModal();">Sign in</a></div>
+        </div>
+    </div>
+
+    <!-- ===== DASHBOARD PANEL ===== -->
+    <div class="dashboard-overlay" id="dashboardOverlay" onclick="closeDashboardOutside(event)">
+        <div class="dashboard-panel" id="dashboardPanel">
+            <!-- Header -->
+            <div class="dash-header">
+                <button class="dash-close" onclick="closeDashboard()"><i class="fas fa-times"></i></button>
+                <div class="dash-avatar" id="dashAvatar">?</div>
+                <div class="dash-user-name" id="dashName">—</div>
+                <div class="dash-user-email" id="dashEmail">—</div>
+                <div class="dash-stats">
+                    <div class="dash-stat"><div class="dash-stat-val" id="dashTripsCount">0</div><div class="dash-stat-lbl">Trips</div></div>
+                    <div class="dash-stat"><div class="dash-stat-val" id="dashSavedCount">0</div><div class="dash-stat-lbl">Saved</div></div>
+                    <div class="dash-stat"><div class="dash-stat-val" id="dashPayCount">0</div><div class="dash-stat-lbl">Payments</div></div>
+                </div>
+            </div>
+            <!-- Tabs -->
+            <div class="dash-tabs">
+                <button class="dash-tab active" id="dashTab-trips" onclick="switchDashTab('trips')">My Trips</button>
+                <button class="dash-tab" id="dashTab-payments" onclick="switchDashTab('payments')">Payments</button>
+                <button class="dash-tab" id="dashTab-saved" onclick="switchDashTab('saved')">Saved</button>
+            </div>
+            <div class="dash-body">
+                <!-- Trips Pane -->
+                <div class="dash-tab-pane active" id="dashPane-trips">
+                    <div class="section-label">Your Bookings</div>
+                    <div id="dashTripsList"><div class="dash-empty"><i class="fas fa-suitcase-rolling"></i>No bookings yet.<br><small>Book a destination to see it here.</small></div></div>
+                </div>
+                <!-- Payments Pane -->
+                <div class="dash-tab-pane" id="dashPane-payments">
+                    <div class="section-label">Payment History</div>
+                    <div id="dashPaymentsList"><div class="dash-empty"><i class="fas fa-receipt"></i>No payments yet.</div></div>
+                </div>
+                <!-- Saved Pane -->
+                <div class="dash-tab-pane" id="dashPane-saved">
+                    <div class="section-label">Wishlist</div>
+                    <div class="saved-grid" id="dashSavedGrid"></div>
+                    <div id="dashSavedEmpty" class="dash-empty" style="display:none"><i class="fas fa-heart"></i>No saved destinations.<br><small>Click ♡ on any destination.</small></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== AI RECOMMENDATION WIDGET ===== -->
+    <button class="ai-widget-btn" id="aiWidgetBtn" onclick="toggleAiPanel()" title="AI Recommendations">
+        <i class="fas fa-magic"></i>
+    </button>
+    <div class="ai-panel" id="aiPanel">
+        <div class="ai-panel-title">✨ Smart Picks</div>
+        <div class="ai-panel-sub">Set your budget & vibe — we'll find the perfect match.</div>
+        <div class="ai-field">
+            <label>Budget (per person)</label>
+            <input type="range" class="ai-range" id="aiBudget" min="500" max="6000" step="250" value="3000" oninput="document.getElementById('aiBudgetDisplay').textContent='$'+this.value">
+            <div class="ai-budget-display" id="aiBudgetDisplay">$3000</div>
+        </div>
+        <div class="ai-field">
+            <label>Experience Type</label>
+            <select class="ai-select" id="aiCategory">
+                <option value="">Any</option>
+                <option value="Beach">🏖️ Beach &amp; Sun</option>
+                <option value="Culture">🏛️ Culture</option>
+                <option value="Mountains">🏔️ Mountains</option>
+                <option value="Adventure">🧗 Adventure</option>
+                <option value="Romance">💕 Romance</option>
+            </select>
+        </div>
+        <button class="btn-ai-recommend" onclick="loadRecommendations()">Find My Trip ✨</button>
+        <div class="ai-results" id="aiResults"></div>
+    </div>
+
+    <!-- ===== TOAST CONTAINER ===== -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script>
+        const API = '';  // Same origin when served by Flask
+
+        /* ========== CUSTOM CURSOR ========== */
+        const dot = document.getElementById('cursorDot');
+        const outline = document.getElementById('cursorOutline');
+        window.addEventListener('mousemove', e => {
+            const posX = e.clientX;
+            const posY = e.clientY;
+            dot.style.left = `${posX}px`;
+            dot.style.top = `${posY}px`;
+            outline.animate({
+                left: `${posX}px`,
+                top: `${posY}px`
+            }, { duration: 500, fill: "forwards" });
+        });
+        
+        document.addEventListener('mouseover', e => {
+            const isClickable = e.target.tagName.toLowerCase() === 'a' || 
+                                e.target.tagName.toLowerCase() === 'button' ||
+                                e.target.closest('.dest-card') ||
+                                e.target.closest('button') ||
+                                e.target.classList.contains('filter-chip');
+            if (isClickable) outline.classList.add('hover');
+            else outline.classList.remove('hover');
+        });
+
+        /* ========== DARK MODE TOGGLE ========== */
+        const themeToggle = document.getElementById('themeToggle');
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        if (currentTheme === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+
+        themeToggle.addEventListener('click', () => {
+            let theme = document.documentElement.getAttribute('data-theme');
+            if (theme === 'dark') {
+                document.documentElement.removeAttribute('data-theme');
+                localStorage.setItem('theme', 'light');
+            } else {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+            }
+        });
+
+        /* ========== HELPERS ========== */
+        function renderStars(rating) {
+            const full = Math.floor(rating);
+            const half = rating % 1 >= 0.4 ? 1 : 0;
+            let html = '';
+            for (let i = 0; i < full; i++) html += '<i class="fas fa-star"></i>';
+            if (half) html += '<i class="fas fa-star-half-alt"></i>';
+            return html;
+        }
+
+        function formatCost(n) {
+            return '$' + Number(n).toLocaleString('en-US');
+        }
+
+        function observeReveal(root) {
+            root.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+        }
+
+        /* ========== INTERSECTION OBSERVER — FADE IN ========== */
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const parent = entry.target.parentElement;
+                    const siblings = Array.from(parent.querySelectorAll('.reveal'));
+                    const i = siblings.indexOf(entry.target);
+                    const delay = i >= 0 ? i * 120 : 0;
+                    setTimeout(() => entry.target.classList.add('visible'), delay);
+                    revealObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+
+        document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+        /* ========== LOAD DESTINATIONS FROM API ========== */
+        let currentSearch = '';
+        let currentCategory = '';
+        let currentSort = 'rating';
+        let currentOrder = 'desc';
+
+        async function loadDestinations(searchQuery = currentSearch) {
+            currentSearch = searchQuery;
+            const grid = document.getElementById('destinationsGrid');
+            
+            grid.innerHTML = Array(3).fill(0).map(() => `
+                <div class="dest-skeleton">
+                    <div class="skeleton skeleton-img"></div>
+                    <div class="skeleton skeleton-text"></div>
+                    <div class="skeleton skeleton-text"></div>
+                    <div class="skeleton skeleton-text"></div>
+                </div>
+            `).join('');
+
+            try {
+                let url = `${API}/api/destinations?limit=6`;
+                if (currentSearch) url += `&search=${encodeURIComponent(currentSearch)}`;
+                if (currentCategory) url += `&category=${encodeURIComponent(currentCategory)}`;
+                url += `&sort=${currentSort}&order=${currentOrder}`;
+
+                const res = await fetch(url);
+                const data = await res.json();
+
+                if (!data.destinations.length) {
+                    grid.innerHTML = '<p style="text-align:center;color:var(--text-muted);grid-column:1/-1;padding:3rem;">No destinations found. Try adjusting your search.</p>';
+                    return;
+                }
+
+                grid.innerHTML = data.destinations.map(d => `
+                    <div class="dest-card reveal" onclick="openModal(${d.id})">
+                        <div class="dest-card-img">
+                            <img src="${d.image_url}" alt="${d.city}, ${d.country}" loading="lazy">
+                            <span class="dest-card-badge">${d.badge}</span>
+                        </div>
+                        <div class="dest-card-body">
+                            <div class="dest-card-location">${d.country} — ${d.continent}</div>
+                            <h3 class="dest-card-title">${d.city}</h3>
+                            <p class="dest-card-desc">${d.tagline}</p>
+                            <div class="dest-card-footer">
+                                <div class="dest-card-stars">${renderStars(d.rating)}</div>
+                                <div class="dest-card-price">${formatCost(d.avg_cost_per_person)} <span>/ person</span></div>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+
+                observeReveal(grid);
+            } catch (err) {
+                console.error('Failed to load destinations:', err);
+                grid.innerHTML = '<p style="text-align:center;color:var(--error);grid-column:1/-1;padding:3rem;">Failed to load destinations.</p>';
+            }
+        }
+
+        /* ========== FILTERS & SORT ========== */
+        const filterChips = document.querySelectorAll('.filter-chip');
+        const sortSelect = document.getElementById('sortSelect');
+
+        filterChips.forEach(chip => {
+            chip.addEventListener('click', () => {
+                filterChips.forEach(c => c.classList.remove('active'));
+                chip.classList.add('active');
+                currentCategory = chip.dataset.category;
+                loadDestinations();
+            });
+        });
+
+        sortSelect.addEventListener('change', (e) => {
+            const val = e.target.value;
+            if (val === 'rating_desc') { currentSort = 'rating'; currentOrder = 'desc'; }
+            if (val === 'cost_asc') { currentSort = 'cost'; currentOrder = 'asc'; }
+            if (val === 'cost_desc') { currentSort = 'cost'; currentOrder = 'desc'; }
+            loadDestinations();
+        });
+
+        /* ========== MODAL ========== */
+        const modalOverlay = document.getElementById('destModalOverlay');
+        const modalClose = document.getElementById('modalClose');
+
+        async function openModal(id) {
+            modalOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            
+            document.getElementById('modalTitle').textContent = 'Loading...';
+            document.getElementById('modalDesc').textContent = '';
+            document.getElementById('modalImg').src = '';
+            document.getElementById('modalReviews').innerHTML = '';
+            
+            const res = await fetch(`${API}/api/destinations/${id}`);
+            const data = await res.json();
+            
+            document.getElementById('modalTitle').textContent = data.city;
+            document.getElementById('modalDesc').textContent = data.description;
+            document.getElementById('modalImg').src = data.image_url;
+            document.getElementById('modalCost').textContent = formatCost(data.avg_cost_per_person);
+            document.getElementById('modalRating').textContent = data.rating;
+            document.getElementById('modalCat').textContent = data.category;
+            
+            if (data.reviews && data.reviews.length > 0) {
+                document.getElementById('modalReviews').innerHTML = data.reviews.map(r => `
+                    <div class="review-card" style="margin-bottom:0">
+                        <div class="review-card-stars">${renderStars(r.rating)}</div>
+                        <p>${r.review_text}</p>
+                        <div class="review-card-author">
+                            <img class="review-card-avatar" src="${r.avatar_url}" alt="${r.reviewer_name}" loading="lazy">
+                            <div>
+                                <div class="review-card-name">${r.reviewer_name}</div>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            } else {
+                document.getElementById('modalReviews').innerHTML = '<p>No reviews yet.</p>';
+            }
+        }
+
+        modalClose.addEventListener('click', () => {
+            modalOverlay.classList.remove('active');
+            document.body.style.overflow = '';
+        });
+        modalOverlay.addEventListener('click', (e) => {
+            if (e.target === modalOverlay) {
+                modalOverlay.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        });
+
+        /* ========== LOAD EXPERIENCES FROM API ========== */
+        async function loadExperiences() {
+            const scroll = document.getElementById('experiencesScroll');
+            try {
+                const res = await fetch(`${API}/api/experiences`);
+                const data = await res.json();
+
+                scroll.innerHTML = data.experiences.map(e => `
+                    <div class="exp-chip reveal">
+                        <div class="exp-chip-icon"><i class="fas ${e.icon}"></i></div>
+                        <div class="exp-chip-text">
+                            <span class="exp-chip-name">${e.name}</span>
+                            <span class="exp-chip-count">${e.experience_count} experiences</span>
+                        </div>
+                    </div>
+                `).join('');
+
+                observeReveal(scroll);
+            } catch (err) {
+                console.error('Failed to load experiences:', err);
+            }
+        }
+
+        /* ========== LOAD REVIEWS FROM API ========== */
+        async function loadReviews() {
+            const grid = document.getElementById('reviewsGrid');
+            try {
+                const res = await fetch(`${API}/api/reviews?limit=3`);
+                const data = await res.json();
+
+                grid.innerHTML = data.reviews.map(r => `
+                    <div class="review-card reveal">
+                        <span class="review-card-quote">"</span>
+                        <div class="review-card-stars">${renderStars(r.rating)}</div>
+                        <p>${r.review_text}</p>
+                        <div class="review-card-author">
+                            <img class="review-card-avatar" src="${r.avatar_url}" alt="${r.reviewer_name}" loading="lazy">
+                            <div>
+                                <div class="review-card-name">${r.reviewer_name}</div>
+                                <div class="review-card-trip">${r.trip_type}</div>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+
+                observeReveal(grid);
+            } catch (err) {
+                console.error('Failed to load reviews:', err);
+            }
+        }
+
+        /* ========== INIT — LOAD ALL DATA ========== */
+        document.addEventListener('DOMContentLoaded', () => {
+            loadDestinations();
+            loadExperiences();
+            loadReviews();
+        });
+
+        /* ========== NAVBAR SCROLL ========== */
+        const navbar = document.getElementById('navbar');
+        const heroBg = document.getElementById('heroBg');
+        let ticking = false;
+
+        window.addEventListener('scroll', () => {
+            if (!ticking) {
+                requestAnimationFrame(() => {
+                    const scrollY = window.scrollY;
+                    navbar.classList.toggle('scrolled', scrollY > 60);
+                    if (scrollY < window.innerHeight) {
+                        heroBg.style.transform = `scale(1.1) translateY(${scrollY * 0.35}px)`;
+                    }
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        });
+
+        /* ========== MOBILE MENU ========== */
+        const hamburger = document.getElementById('hamburger');
+        const mobileMenu = document.getElementById('mobileMenu');
+
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            mobileMenu.classList.toggle('active');
+            document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
+        });
+
+        document.querySelectorAll('.mobile-link').forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('active');
+                mobileMenu.classList.remove('active');
+                document.body.style.overflow = '';
+            });
+        });
+
+        /* ========== SMOOTH SCROLL ========== */
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    const offset = navbar.offsetHeight + 16;
+                    const top = target.getBoundingClientRect().top + window.scrollY - offset;
+                    window.scrollTo({ top, behavior: 'smooth' });
+                }
+            });
+        });
+
+        /* ========== HERO SEARCH — CALLS API ========== */
+        const searchInput = document.getElementById('searchInput');
+        const searchBtn = document.querySelector('.hero-search button');
+
+        function performSearch() {
+            const query = searchInput.value.trim();
+            if (query) {
+                loadDestinations(query);
+                document.querySelector('#destinations').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+
+        searchBtn.addEventListener('click', performSearch);
+        searchInput.addEventListener('keydown', e => { if (e.key === 'Enter') performSearch(); });
+
+        // Animated placeholder
+        const placeholders = ['Where do you want to go?', 'Try "Santorini"...', 'Try "Kyoto"...', 'Try "Swiss Alps"...'];
+        let placeholderIndex = 0;
+        searchInput.style.transition = 'opacity 0.2s ease';
+
+        setInterval(() => {
+            if (document.activeElement !== searchInput) {
+                placeholderIndex = (placeholderIndex + 1) % placeholders.length;
+                searchInput.style.opacity = '0';
+                setTimeout(() => {
+                    searchInput.placeholder = placeholders[placeholderIndex];
+                    searchInput.style.opacity = '1';
+                }, 200);
+            }
+        }, 3000);
+
+        /* ========== NEWSLETTER — POST TO API ========== */
+        document.getElementById('newsletterForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+            const btn = this.querySelector('button');
+            const input = this.querySelector('input');
+            const email = input.value.trim();
+            const originalText = btn.textContent;
+
+            try {
+                const res = await fetch(`${API}/api/newsletter`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email })
+                });
+                const data = await res.json();
+
+                if (data.success) {
+                    btn.textContent = 'Subscribed ✓';
+                    btn.style.background = '#2a7a4b';
+                    btn.style.color = '#fff';
+                    input.value = '';
+                } else {
+                    btn.textContent = 'Error';
+                    btn.style.background = '#ba1a1a';
+                    btn.style.color = '#fff';
+                }
+            } catch {
+                btn.textContent = 'Offline';
+                btn.style.background = '#ba1a1a';
+                btn.style.color = '#fff';
+            }
+
+            setTimeout(() => {
+                btn.textContent = originalText;
+                btn.style.background = '';
+                btn.style.color = '';
+            }, 3000);
+        });
+
+        /* ===================================================
+           TOAST HELPER
+        =================================================== */
+        function showToast(msg, type = 'info', duration = 4000) {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            const icons = { success: 'fa-circle-check', error: 'fa-circle-exclamation', info: 'fa-circle-info' };
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `<i class="fas ${icons[type] || icons.info}"></i> ${msg}`;
+            container.appendChild(toast);
+            requestAnimationFrame(() => toast.classList.add('show'));
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 500);
+            }, duration);
+        }
+
+        /* ===================================================
+           AUTH STATE
+        =================================================== */
+        let currentUser = null;
+
+        async function checkAuthState() {
+            try {
+                const res = await fetch(`${API}/api/auth/me`, { credentials: 'include' });
+                const data = await res.json();
+                if (data.authenticated) {
+                    setLoggedIn(data.user);
+                } else {
+                    setLoggedOut();
+                }
+            } catch { setLoggedOut(); }
+        }
+
+        function setLoggedIn(user) {
+            currentUser = user;
+            document.getElementById('navGuestItems').style.display = 'none';
+            document.getElementById('navUserItems').style.display = 'flex';
+            document.getElementById('navUserItems').style.alignItems = 'center';
+            document.getElementById('navUserName').textContent = user.name.split(' ')[0];
+            // Show review form in modal if open
+            const rf = document.getElementById('modalReviewForm');
+            if (rf) rf.style.display = 'block';
+        }
+
+        function setLoggedOut() {
+            currentUser = null;
+            document.getElementById('navGuestItems').style.display = 'flex';
+            document.getElementById('navGuestItems').style.alignItems = 'center';
+            document.getElementById('navUserItems').style.display = 'none';
+        }
+
+        /* ===================================================
+           AUTH MODALS
+        =================================================== */
+        function openLoginModal() {
+            document.getElementById('loginOverlay').classList.add('active');
+            document.body.style.overflow = 'hidden';
+            setTimeout(() => document.getElementById('loginEmail').focus(), 300);
+        }
+        function closeLoginModal() {
+            document.getElementById('loginOverlay').classList.remove('active');
+            document.getElementById('loginError').textContent = '';
+            document.body.style.overflow = '';
+        }
+        function openSignupModal() {
+            document.getElementById('signupOverlay').classList.add('active');
+            document.body.style.overflow = 'hidden';
+            setTimeout(() => document.getElementById('signupName').focus(), 300);
+        }
+        function closeSignupModal() {
+            document.getElementById('signupOverlay').classList.remove('active');
+            document.getElementById('signupError').textContent = '';
+            document.body.style.overflow = '';
+        }
+
+        // Close modals on backdrop click
+        document.getElementById('loginOverlay').addEventListener('click', e => { if (e.target === e.currentTarget) closeLoginModal(); });
+        document.getElementById('signupOverlay').addEventListener('click', e => { if (e.target === e.currentTarget) closeSignupModal(); });
+
+        // Enter key in auth forms
+        document.getElementById('loginPassword').addEventListener('keydown', e => { if (e.key === 'Enter') handleLogin(); });
+        document.getElementById('signupPassword').addEventListener('keydown', e => { if (e.key === 'Enter') handleSignup(); });
+
+        async function handleLogin() {
+            const email = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPassword').value;
+            const errEl = document.getElementById('loginError');
+            errEl.textContent = '';
+            if (!email || !password) { errEl.textContent = 'Please fill in all fields.'; return; }
+            try {
+                const res = await fetch(`${API}/api/auth/login`, {
+                    method: 'POST', credentials: 'include',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    setLoggedIn(data.user);
+                    closeLoginModal();
+                    showToast(`Welcome back, ${data.user.name.split(' ')[0]}! 🌍`, 'success');
+                } else {
+                    errEl.textContent = data.error || 'Login failed.';
+                }
+            } catch { errEl.textContent = 'Network error. Please try again.'; }
+        }
+
+        async function handleSignup() {
+            const name = document.getElementById('signupName').value.trim();
+            const email = document.getElementById('signupEmail').value.trim();
+            const password = document.getElementById('signupPassword').value;
+            const errEl = document.getElementById('signupError');
+            errEl.textContent = '';
+            if (!name || !email || !password) { errEl.textContent = 'Please fill in all fields.'; return; }
+            try {
+                const res = await fetch(`${API}/api/auth/signup`, {
+                    method: 'POST', credentials: 'include',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, email, password })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    setLoggedIn(data.user);
+                    closeSignupModal();
+                    showToast(`Welcome to Wander, ${data.user.name.split(' ')[0]}! ✈️`, 'success');
+                } else {
+                    errEl.textContent = data.error || 'Signup failed.';
+                }
+            } catch { errEl.textContent = 'Network error. Please try again.'; }
+        }
+
+        async function handleLogout() {
+            await fetch(`${API}/api/auth/logout`, { method: 'POST', credentials: 'include' });
+            setLoggedOut();
+            showToast('Signed out. Safe travels! 👋', 'info');
+        }
+
+        /* ===================================================
+           DASHBOARD
+        =================================================== */
+        function openDashboard() {
+            document.getElementById('dashboardOverlay').classList.add('active');
+            document.body.style.overflow = 'hidden';
+            populateDashHeader();
+            loadDashboardTrips();
+        }
+        function closeDashboard() {
+            document.getElementById('dashboardOverlay').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+        function closeDashboardOutside(e) {
+            if (e.target === document.getElementById('dashboardOverlay')) closeDashboard();
+        }
+
+        function populateDashHeader() {
+            if (!currentUser) return;
+            const initials = currentUser.name.split(' ').map(p => p[0]).join('').toUpperCase().slice(0,2);
+            document.getElementById('dashAvatar').textContent = initials;
+            document.getElementById('dashName').textContent = currentUser.name;
+            document.getElementById('dashEmail').textContent = currentUser.email;
+        }
+
+        function switchDashTab(tab) {
+            document.querySelectorAll('.dash-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.dash-tab-pane').forEach(p => p.classList.remove('active'));
+            document.getElementById(`dashTab-${tab}`).classList.add('active');
+            document.getElementById(`dashPane-${tab}`).classList.add('active');
+            if (tab === 'payments') loadDashboardPayments();
+            if (tab === 'saved') loadDashboardSaved();
+        }
+
+        async function loadDashboardTrips() {
+            try {
+                const res = await fetch(`${API}/api/bookings`, { credentials: 'include' });
+                const data = await res.json();
+                if (!res.ok) return;
+                const bookings = data.bookings || [];
+                document.getElementById('dashTripsCount').textContent = bookings.length;
+                const list = document.getElementById('dashTripsList');
+                if (!bookings.length) {
+                    list.innerHTML = '<div class="dash-empty"><i class="fas fa-suitcase-rolling"></i>No bookings yet.<br><small>Explore destinations and book your first trip!</small></div>';
+                    return;
+                }
+                list.innerHTML = bookings.map(b => `
+                    <div class="trip-card">
+                        ${b.destination_image ? `<img class="trip-thumb" src="${b.destination_image}" alt="${b.destination_name}">` : '<div class="trip-thumb-placeholder">🌍</div>'}
+                        <div class="trip-info">
+                            <div class="trip-name">${b.destination_name}</div>
+                            <div class="trip-date"><i class="fas fa-calendar-alt" style="color:var(--gold-muted);margin-right:0.3rem"></i>${b.travel_date} · ${b.num_guests} guest${b.num_guests > 1 ? 's' : ''}</div>
+                            <span class="trip-status ${b.status}">${b.status}</span>
+                            ${b.total_amount ? `<span style="font-size:0.78rem;color:var(--text-muted);margin-left:0.5rem">$${b.total_amount.toLocaleString()}</span>` : ''}
+                        </div>
+                        ${b.status !== 'cancelled' ? `<button class="trip-cancel-btn" onclick="cancelTrip(${b.id})">Cancel</button>` : ''}
+                    </div>
+                `).join('');
+            } catch (e) { console.error(e); }
+        }
+
+        async function cancelTrip(bookingId) {
+            if (!confirm('Cancel this booking?')) return;
+            try {
+                const res = await fetch(`${API}/api/bookings/${bookingId}`, { method: 'DELETE', credentials: 'include' });
+                const data = await res.json();
+                if (data.success) { showToast('Booking cancelled.', 'info'); loadDashboardTrips(); }
+                else showToast(data.error || 'Cancel failed.', 'error');
+            } catch { showToast('Network error.', 'error'); }
+        }
+
+        async function loadDashboardPayments() {
+            try {
+                const res = await fetch(`${API}/api/payments`, { credentials: 'include' });
+                const data = await res.json();
+                if (!res.ok) return;
+                const payments = data.payments || [];
+                document.getElementById('dashPayCount').textContent = payments.length;
+                const list = document.getElementById('dashPaymentsList');
+                if (!payments.length) {
+                    list.innerHTML = '<div class="dash-empty"><i class="fas fa-receipt"></i>No payments yet.</div>';
+                    return;
+                }
+                list.innerHTML = payments.map(p => `
+                    <div class="payment-row">
+                        <div>
+                            <div class="payment-dest">${p.destination_name || 'Booking'}</div>
+                            <div class="payment-date">${p.travel_date || ''} · <span class="trip-status ${p.status === 'succeeded' ? 'confirmed' : 'pending'}" style="font-size:0.65rem">${p.status}</span></div>
+                        </div>
+                        <div class="payment-amount">$${(p.amount || 0).toLocaleString()}</div>
+                    </div>
+                `).join('');
+            } catch (e) { console.error(e); }
+        }
+
+        async function loadDashboardSaved() {
+            try {
+                const res = await fetch(`${API}/api/saved`, { credentials: 'include' });
+                const data = await res.json();
+                if (!res.ok) return;
+                const saved = data.saved || [];
+                document.getElementById('dashSavedCount').textContent = saved.length;
+                const grid = document.getElementById('dashSavedGrid');
+                const empty = document.getElementById('dashSavedEmpty');
+                if (!saved.length) { grid.innerHTML = ''; empty.style.display = 'block'; return; }
+                empty.style.display = 'none';
+                grid.innerHTML = saved.map(s => `
+                    <div class="saved-card" onclick="openModal(${s.destination_id});closeDashboard();">
+                        ${s.destination_image ? `<img src="${s.destination_image}" alt="${s.destination_name}">` : ''}
+                        <div class="saved-card-info">
+                            <div class="saved-card-name">${s.destination_name}</div>
+                            <div class="saved-card-country">${s.destination_country}</div>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (e) { console.error(e); }
+        }
+
+        /* ===================================================
+           ENHANCED MODAL (save, weather, map, tips, booking, review)
+        =================================================== */
+        let currentDestId = null;
+        let currentDestCost = 0;
+        let currentBookingId = null;
+        let selectedStars = 0;
+
+        // Override the existing openModal function with enhanced version
+        const _originalOpenModal = openModal;
+        async function openModal(id) {
+            currentDestId = id;
+            currentBookingId = null;
+            selectedStars = 0;
+            document.getElementById('stripeWrapper').style.display = 'none';
+            document.getElementById('btnBookNow').style.display = 'block';
+            document.getElementById('modalWeather').style.display = 'none';
+            document.getElementById('modalSaveBtn').className = 'modal-save-btn';
+            document.getElementById('modalSaveIcon').className = 'far fa-heart';
+
+            modalOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+
+            document.getElementById('modalTitle').textContent = 'Loading…';
+            document.getElementById('modalDesc').textContent = '';
+            document.getElementById('modalImg').src = '';
+            document.getElementById('modalReviews').innerHTML = '';
+            document.getElementById('modalUserReviews').innerHTML = '';
+            document.getElementById('modalTipsList').innerHTML = '';
+            document.getElementById('modalFoodsGrid').innerHTML = '';
+            document.getElementById('modalBudgetBars').innerHTML = '';
+
+            // Set default travel date to tomorrow
+            const tomorrow = new Date(); tomorrow.setDate(tomorrow.getDate() + 1);
+            document.getElementById('bookingDate').value = tomorrow.toISOString().split('T')[0];
+            document.getElementById('bookingDate').min = tomorrow.toISOString().split('T')[0];
+
+            try {
+                const res = await fetch(`${API}/api/destinations/${id}`);
+                const data = await res.json();
+
+                currentDestCost = data.avg_cost_per_person || 0;
+                updateBookingTotal();
+
+                document.getElementById('modalTitle').textContent = `${data.city}, ${data.country}`;
+                document.getElementById('modalDesc').textContent = data.description;
+                document.getElementById('modalImg').src = data.image_url;
+                document.getElementById('modalImg').alt = `${data.city}, ${data.country}`;
+                document.getElementById('modalCost').textContent = formatCost(data.avg_cost_per_person);
+                document.getElementById('modalRating').textContent = `${data.rating} ★`;
+                document.getElementById('modalCat').textContent = data.category;
+                document.getElementById('modalSeason').textContent = data.best_season || '—';
+
+                // Map
+                const mapQ = encodeURIComponent(`${data.city}, ${data.country}`);
+                document.getElementById('modalMapFrame').src = `https://maps.google.com/maps?q=${mapQ}&z=12&output=embed`;
+
+                // Travel Tips
+                if (data.travel_tips && data.travel_tips.length) {
+                    document.getElementById('modalTipsList').innerHTML = data.travel_tips.map(t => `<li>${t}</li>`).join('');
+                }
+
+                // Local Foods
+                if (data.local_foods && data.local_foods.length) {
+                    document.getElementById('modalFoodsGrid').innerHTML = data.local_foods.map(f => `<div class="food-chip">🍴 ${f}</div>`).join('');
+                }
+
+                // Budget Breakdown
+                if (data.budget_breakdown) {
+                    const total = data.avg_cost_per_person || 1;
+                    const items = [
+                        { label: '🏨 Accommodation', key: 'accommodation' },
+                        { label: '🍽️ Food & Dining', key: 'food' },
+                        { label: '🎭 Activities', key: 'activities' },
+                        { label: '🚌 Transport', key: 'transport' },
+                    ];
+                    document.getElementById('modalBudgetBars').innerHTML = items.map(item => {
+                        const val = data.budget_breakdown[item.key] || 0;
+                        const pct = Math.round((val / total) * 100);
+                        return `<div class="budget-item">
+                            <span class="budget-label">${item.label}</span>
+                            <div class="budget-bar-wrap"><div class="budget-bar" style="width:0%" data-target="${pct}"></div></div>
+                            <span class="budget-amount">$${val.toLocaleString()}</span>
+                        </div>`;
+                    }).join('');
+                    // Animate bars
+                    requestAnimationFrame(() => {
+                        document.querySelectorAll('.budget-bar').forEach(bar => {
+                            bar.style.width = bar.dataset.target + '%';
+                        });
+                    });
+                }
+
+                // CSV Reviews
+                if (data.reviews && data.reviews.length > 0) {
+                    document.getElementById('modalReviews').innerHTML = data.reviews.map(r => `
+                        <div class="review-card" style="margin-bottom:0">
+                            <div class="review-card-stars">${renderStars(r.rating)}</div>
+                            <p>${r.review_text}</p>
+                            <div class="review-card-author">
+                                <img class="review-card-avatar" src="${r.avatar_url}" alt="${r.reviewer_name}" loading="lazy">
+                                <div><div class="review-card-name">${r.reviewer_name}</div></div>
+                            </div>
+                        </div>
+                    `).join('');
+                } else {
+                    document.getElementById('modalReviews').innerHTML = '<p style="color:var(--text-muted);font-size:0.88rem">No editorial reviews yet.</p>';
+                }
+
+                // Load weather
+                loadWeather(data.city);
+
+                // Load user reviews from DB
+                loadUserReviews(id);
+
+                // Check if saved
+                if (currentUser) {
+                    checkSaved(id);
+                    document.getElementById('modalReviewForm').style.display = 'block';
+                } else {
+                    document.getElementById('modalReviewForm').style.display = 'none';
+                }
+
+                observeReveal(document.getElementById('destModal'));
+            } catch (err) {
+                console.error('Modal load failed:', err);
+                document.getElementById('modalTitle').textContent = 'Error loading destination.';
+            }
+        }
+
+        /* ---- Weather ---- */
+        async function loadWeather(city) {
+            try {
+                const res = await fetch(`https://wttr.in/${encodeURIComponent(city)}?format=j1`);
+                if (!res.ok) return;
+                const data = await res.json();
+                const current = data.current_condition[0];
+                const desc = current.weatherDesc[0].value;
+                const tempC = current.temp_C;
+                const weatherIcons = { 'Sunny': '☀️', 'Clear': '🌙', 'Partly cloudy': '⛅', 'Cloudy': '☁️', 'Overcast': '☁️', 'Mist': '🌫️', 'Rain': '🌧️', 'Snow': '❄️', 'Thunderstorm': '⛈️', 'Fog': '🌫️' };
+                let icon = '🌤️';
+                for (const [key, val] of Object.entries(weatherIcons)) { if (desc.toLowerCase().includes(key.toLowerCase())) { icon = val; break; } }
+                document.getElementById('weatherIcon').textContent = icon;
+                document.getElementById('weatherTemp').textContent = `${tempC}°C`;
+                document.getElementById('weatherDesc').textContent = desc;
+                document.getElementById('weatherCity').textContent = `Current weather in ${city}`;
+                document.getElementById('modalWeather').style.display = 'flex';
+            } catch { /* weather API might fail — that's ok */ }
+        }
+
+        /* ---- Save / Unsave ---- */
+        async function checkSaved(destId) {
+            try {
+                const res = await fetch(`${API}/api/saved`, { credentials: 'include' });
+                const data = await res.json();
+                if (!res.ok) return;
+                const isSaved = (data.saved || []).some(s => s.destination_id === destId);
+                updateSaveButton(isSaved);
+            } catch {}
+        }
+
+        function updateSaveButton(saved) {
+            const btn = document.getElementById('modalSaveBtn');
+            const icon = document.getElementById('modalSaveIcon');
+            btn.className = `modal-save-btn${saved ? ' saved' : ''}`;
+            icon.className = saved ? 'fas fa-heart' : 'far fa-heart';
+        }
+
+        async function toggleSaveDestination() {
+            if (!currentUser) { openLoginModal(); return; }
+            try {
+                const res = await fetch(`${API}/api/saved`, {
+                    method: 'POST', credentials: 'include',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ destination_id: currentDestId })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    updateSaveButton(data.saved);
+                    showToast(data.saved ? '❤️ Added to wishlist!' : '💔 Removed from wishlist.', data.saved ? 'success' : 'info');
+                }
+            } catch { showToast('Failed to update wishlist.', 'error'); }
+        }
+
+        /* ---- Booking ---- */
+        function updateBookingTotal() {
+            const guests = parseInt(document.getElementById('bookingGuests')?.value || 1);
+            const total = currentDestCost * guests;
+            if (document.getElementById('bookingTotal')) {
+                document.getElementById('bookingTotal').textContent = formatCost(total);
+            }
+        }
+
+        document.addEventListener('change', e => { if (e.target.id === 'bookingGuests') updateBookingTotal(); });
+
+        async function handleBookNow() {
+            if (!currentUser) { openLoginModal(); return; }
+            const travelDate = document.getElementById('bookingDate').value;
+            const numGuests = document.getElementById('bookingGuests').value;
+            if (!travelDate) { showToast('Please select a travel date.', 'error'); return; }
+
+            const btn = document.getElementById('btnBookNow');
+            btn.disabled = true; btn.textContent = 'Creating booking…';
+
+            try {
+                const res = await fetch(`${API}/api/bookings`, {
+                    method: 'POST', credentials: 'include',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ destination_id: currentDestId, travel_date: travelDate, num_guests: parseInt(numGuests) })
+                });
+                const data = await res.json();
+                if (!res.ok) { showToast(data.error || 'Booking failed.', 'error'); btn.disabled = false; btn.textContent = '🗺️ Book Now'; return; }
+
+                currentBookingId = data.booking_id;
+                const total = data.total_amount;
+
+                // Show payment section
+                btn.style.display = 'none';
+                document.getElementById('stripeWrapper').style.display = 'block';
+                document.getElementById('payBtnAmount').textContent = '· ' + formatCost(total);
+
+                // Create payment intent
+                const piRes = await fetch(`${API}/api/payment/create-intent`, {
+                    method: 'POST', credentials: 'include',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ booking_id: currentBookingId, amount: total })
+                });
+                const piData = await piRes.json();
+
+                if (piData.demo_mode) {
+                    document.getElementById('stripeCard').innerHTML = '<div style="padding:0.5rem;font-size:0.82rem;color:#555;text-align:center">🔒 Demo Payment — click below to simulate success</div>';
+                    document.getElementById('demoNotice').style.display = 'block';
+                    // Store payment intent id for confirm
+                    document.getElementById('btnPay').dataset.piId = piData.payment_intent_id;
+                } else {
+                    document.getElementById('demoNotice').style.display = 'none';
+                    // In production: use Stripe.js to render card element
+                    document.getElementById('stripeCard').innerHTML = '<div style="padding:0.5rem;font-size:0.82rem;color:#555;text-align:center">💳 Add your real Stripe publishable key to enable card entry.</div>';
+                    document.getElementById('btnPay').dataset.piId = piData.payment_intent_id || '';
+                }
+            } catch (err) {
+                showToast('Error creating booking. Please try again.', 'error');
+                btn.disabled = false; btn.textContent = '🗺️ Book Now';
+            }
+        }
+
+        async function handlePay() {
+            const btn = document.getElementById('btnPay');
+            btn.disabled = true; btn.textContent = 'Processing…';
+            const piId = btn.dataset.piId || '';
+            try {
+                const res = await fetch(`${API}/api/payment/confirm`, {
+                    method: 'POST', credentials: 'include',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ payment_intent_id: piId, booking_id: currentBookingId })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    document.getElementById('stripeWrapper').innerHTML = '<div style="text-align:center;padding:1.5rem;color:white"><div style="font-size:2rem;margin-bottom:0.5rem">🎉</div><div style="font-size:1.1rem;font-weight:700;margin-bottom:0.25rem">Booking Confirmed!</div><div style="opacity:0.6;font-size:0.82rem">Check your dashboard for details.</div></div>';
+                    showToast('🎉 Booking confirmed! Safe travels!', 'success', 6000);
+                } else {
+                    showToast(data.error || 'Payment failed.', 'error');
+                    btn.disabled = false; btn.textContent = '🔒 Confirm & Pay';
+                }
+            } catch { showToast('Payment error. Please retry.', 'error'); btn.disabled = false; btn.textContent = '🔒 Confirm & Pay'; }
+        }
+
+        /* ---- User Reviews ---- */
+        async function loadUserReviews(destId) {
+            try {
+                const res = await fetch(`${API}/api/user-reviews/${destId}`);
+                const data = await res.json();
+                const container = document.getElementById('modalUserReviews');
+                if (!data.reviews || !data.reviews.length) {
+                    container.innerHTML = '<p style="color:var(--text-muted);font-size:0.85rem">No community reviews yet — be the first!</p>';
+                    return;
+                }
+                container.innerHTML = data.reviews.map(r => `
+                    <div class="user-review-card">
+                        <div class="user-review-header">
+                            <span class="user-review-name">${r.reviewer_name}</span>
+                            <span class="user-review-stars">${renderStars(r.rating)}</span>
+                        </div>
+                        <div class="user-review-text">${r.review_text}</div>
+                        <div class="user-review-date">${new Date(r.created_at).toLocaleDateString()}</div>
+                    </div>
+                `).join('');
+            } catch {}
+        }
+
+        /* ---- Star Picker ---- */
+        document.querySelectorAll('#starPicker i').forEach(star => {
+            star.addEventListener('mouseenter', () => {
+                const val = parseInt(star.dataset.val);
+                document.querySelectorAll('#starPicker i').forEach(s => s.className = parseInt(s.dataset.val) <= val ? 'fas fa-star lit' : 'far fa-star');
+            });
+            star.addEventListener('click', () => { selectedStars = parseInt(star.dataset.val); });
+        });
+        document.getElementById('starPicker').addEventListener('mouseleave', () => {
+            document.querySelectorAll('#starPicker i').forEach(s => s.className = parseInt(s.dataset.val) <= selectedStars ? 'fas fa-star lit' : 'far fa-star');
+        });
+
+        async function submitReview() {
+            if (!currentUser) { openLoginModal(); return; }
+            if (!selectedStars) { showToast('Please select a star rating.', 'error'); return; }
+            const text = document.getElementById('reviewText').value.trim();
+            if (!text) { showToast('Please write your review.', 'error'); return; }
+            try {
+                const res = await fetch(`${API}/api/user-reviews`, {
+                    method: 'POST', credentials: 'include',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ destination_id: currentDestId, rating: selectedStars, review_text: text })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    showToast('✍️ Review submitted — thank you!', 'success');
+                    document.getElementById('reviewText').value = '';
+                    selectedStars = 0;
+                    document.querySelectorAll('#starPicker i').forEach(s => s.className = 'far fa-star');
+                    loadUserReviews(currentDestId);
+                } else { showToast(data.error || 'Failed to submit.', 'error'); }
+            } catch { showToast('Network error.', 'error'); }
+        }
+
+        /* ===================================================
+           AI RECOMMENDATIONS
+        =================================================== */
+        function toggleAiPanel() {
+            document.getElementById('aiPanel').classList.toggle('open');
+        }
+
+        async function loadRecommendations() {
+            const budget = document.getElementById('aiBudget').value;
+            const category = document.getElementById('aiCategory').value;
+            const results = document.getElementById('aiResults');
+            results.innerHTML = '<div style="text-align:center;color:var(--text-muted);font-size:0.82rem;padding:1rem">Finding your perfect trip…</div>';
+            try {
+                let url = `${API}/api/recommend?budget=${budget}`;
+                if (category) url += `&category=${encodeURIComponent(category)}`;
+                const res = await fetch(url);
+                const data = await res.json();
+                if (!data.destinations.length) {
+                    results.innerHTML = '<div style="text-align:center;color:var(--text-muted);font-size:0.82rem;padding:1rem">No matches found. Try increasing your budget.</div>';
+                    return;
+                }
+                results.innerHTML = data.destinations.map(d => `
+                    <div class="ai-result-card" onclick="openModal(${d.id});document.getElementById('aiPanel').classList.remove('open');">
+                        <img class="ai-result-img" src="${d.image_url}" alt="${d.city}">
+                        <div>
+                            <div class="ai-result-name">${d.city}, ${d.country}</div>
+                            <div class="ai-result-price">${formatCost(d.avg_cost_per_person)}/person · ${d.rating}★</div>
+                        </div>
+                    </div>
+                `).join('');
+            } catch { results.innerHTML = '<div style="color:var(--error);font-size:0.82rem;padding:1rem">Failed to load recommendations.</div>'; }
+        }
+
+        /* ===================================================
+           INIT — check auth state on load
+        =================================================== */
+        document.addEventListener('DOMContentLoaded', () => {
+            checkAuthState();
+        });
+    </script>
+</body>
+
+</html>

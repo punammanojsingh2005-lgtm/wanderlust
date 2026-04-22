@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel — Wander</title>
+    <meta name="description" content="Wander Admin Dashboard">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --navy: #0D1B2A; --navy-mid: #1B2D45; --navy-light: #3a4859;
+            --gold: #C9A84C; --gold-light: #ffe08f; --gold-muted: #9A7B33;
+            --cream: #FEF9F1; --surface: #f8f3eb;
+            --text-primary: #1d1c17; --text-secondary: #44474c; --text-muted: #74777d;
+            --white: #ffffff; --error: #ba1a1a; --success: #2a7a4b;
+            --sidebar-w: 260px;
+            --font-display: 'Playfair Display', serif; --font-body: 'DM Sans', sans-serif;
+        }
+        body { font-family: var(--font-body); background: #f0ebe3; color: var(--text-primary); display: flex; min-height: 100vh; }
+
+        /* ── Sidebar ── */
+        .sidebar {
+            width: var(--sidebar-w); background: var(--navy); position: fixed; top: 0; left: 0;
+            height: 100vh; display: flex; flex-direction: column; z-index: 100;
+        }
+        .sidebar-logo {
+            padding: 2rem 1.75rem 1.5rem;
+            font-family: var(--font-display); font-size: 1.5rem; color: #fff;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+        .sidebar-logo span { color: var(--gold); }
+        .sidebar-badge { font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold-muted); font-family: var(--font-body); display: block; font-weight: 600; margin-top: 0.2rem; }
+        .sidebar-nav { flex: 1; padding: 1.25rem 0; overflow-y: auto; }
+        .nav-item {
+            display: flex; align-items: center; gap: 0.875rem;
+            padding: 0.875rem 1.75rem; color: rgba(255,255,255,0.6);
+            font-size: 0.875rem; font-weight: 500; cursor: pointer;
+            transition: all 0.3s; border-left: 3px solid transparent; text-decoration: none;
+        }
+        .nav-item:hover, .nav-item.active { color: #fff; background: rgba(201,168,76,0.1); border-left-color: var(--gold); }
+        .nav-item i { width: 18px; text-align: center; font-size: 1rem; }
+        .sidebar-footer { padding: 1.25rem 1.75rem; border-top: 1px solid rgba(255,255,255,0.08); }
+        .admin-greeting { color: rgba(255,255,255,0.5); font-size: 0.78rem; margin-bottom: 0.5rem; }
+        .btn-logout {
+            width: 100%; padding: 0.6rem; background: rgba(186,26,26,0.15);
+            color: #ff8a80; border: 1px solid rgba(186,26,26,0.3); border-radius: 0.35rem;
+            font-size: 0.8rem; font-weight: 600; cursor: pointer; transition: all 0.3s; font-family: var(--font-body);
+        }
+        .btn-logout:hover { background: rgba(186,26,26,0.3); }
+
+        /* ── Main Content ── */
+        .main { margin-left: var(--sidebar-w); flex: 1; display: flex; flex-direction: column; }
+        .topbar {
+            background: white; padding: 1.25rem 2rem; display: flex; align-items: center;
+            justify-content: space-between; box-shadow: 0 1px 0 rgba(0,0,0,0.06); position: sticky; top: 0; z-index: 50;
+        }
+        .topbar-title { font-family: var(--font-display); font-size: 1.4rem; color: var(--navy); }
+        .topbar-right { display: flex; align-items: center; gap: 1rem; font-size: 0.85rem; color: var(--text-muted); }
+        .status-dot { width: 8px; height: 8px; background: #2a7a4b; border-radius: 50%; display: inline-block; margin-right: 0.25rem; }
+
+        .content { padding: 2rem; }
+
+        /* ── Stat Cards ── */
+        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.25rem; margin-bottom: 2rem; }
+        .stat-card {
+            background: white; border-radius: 0.875rem; padding: 1.5rem;
+            display: flex; align-items: center; gap: 1rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04); border: 1px solid rgba(0,0,0,0.04);
+        }
+        .stat-icon {
+            width: 52px; height: 52px; border-radius: 0.75rem;
+            display: grid; place-items: center; font-size: 1.25rem; flex-shrink: 0;
+        }
+        .stat-icon.gold { background: rgba(201,168,76,0.12); color: var(--gold-muted); }
+        .stat-icon.navy { background: rgba(13,27,42,0.08); color: var(--navy); }
+        .stat-icon.green { background: rgba(42,122,75,0.1); color: #2a7a4b; }
+        .stat-icon.blue { background: rgba(66,133,244,0.1); color: #4285f4; }
+        .stat-value { font-size: 1.75rem; font-weight: 700; color: var(--text-primary); line-height: 1; margin-bottom: 0.25rem; }
+        .stat-label { font-size: 0.78rem; color: var(--text-muted); font-weight: 500; }
+
+        /* ── Panel ── */
+        .panel {
+            background: white; border-radius: 0.875rem; padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04); border: 1px solid rgba(0,0,0,0.04);
+            margin-bottom: 1.5rem;
+        }
+        .panel-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem; }
+        .panel-title { font-size: 1rem; font-weight: 700; color: var(--text-primary); }
+        .panel-badge { padding: 0.25rem 0.75rem; background: rgba(201,168,76,0.12); color: var(--gold-muted); border-radius: 2rem; font-size: 0.75rem; font-weight: 600; }
+
+        /* ── Table ── */
+        .data-table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
+        .data-table th { padding: 0.75rem 1rem; text-align: left; font-weight: 600; color: var(--text-muted); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; border-bottom: 1px solid #f0ebe3; }
+        .data-table td { padding: 0.875rem 1rem; border-bottom: 1px solid #f8f3eb; vertical-align: middle; }
+        .data-table tr:last-child td { border-bottom: none; }
+        .data-table tr:hover td { background: #fafaf8; }
+
+        .status-badge { padding: 0.25rem 0.75rem; border-radius: 2rem; font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; }
+        .status-badge.confirmed { background: rgba(42,122,75,0.12); color: #2a7a4b; }
+        .status-badge.pending { background: rgba(201,168,76,0.12); color: var(--gold-muted); }
+        .status-badge.cancelled { background: rgba(186,26,26,0.1); color: var(--error); }
+
+        .action-btn {
+            padding: 0.3rem 0.75rem; border-radius: 0.375rem; font-size: 0.75rem;
+            font-weight: 600; cursor: pointer; border: none; font-family: var(--font-body);
+            transition: all 0.2s; margin-right: 0.25rem;
+        }
+        .action-btn.confirm { background: rgba(42,122,75,0.1); color: #2a7a4b; }
+        .action-btn.confirm:hover { background: rgba(42,122,75,0.2); }
+        .action-btn.cancel { background: rgba(186,26,26,0.08); color: var(--error); }
+        .action-btn.cancel:hover { background: rgba(186,26,26,0.16); }
+
+        /* ── Tab Navigation ── */
+        .tab-nav { display: flex; gap: 0.25rem; margin-bottom: 1.5rem; background: white; padding: 0.375rem; border-radius: 0.75rem; width: fit-content; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+        .tab-btn {
+            padding: 0.6rem 1.25rem; border: none; background: transparent; border-radius: 0.5rem;
+            font-size: 0.85rem; font-weight: 500; cursor: pointer; color: var(--text-muted);
+            transition: all 0.25s; font-family: var(--font-body);
+        }
+        .tab-btn.active { background: var(--navy); color: white; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        /* ── Toast ── */
+        .toast-admin {
+            position: fixed; bottom: 2rem; right: 2rem; padding: 1rem 1.5rem;
+            background: var(--navy); color: white; border-radius: 0.625rem;
+            font-size: 0.875rem; font-weight: 500; z-index: 9999;
+            transform: translateY(100px); opacity: 0;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+        }
+        .toast-admin.show { transform: translateY(0); opacity: 1; }
+        .toast-admin.success { border-left: 4px solid #2a7a4b; }
+        .toast-admin.error { border-left: 4px solid var(--error); }
+
+        /* Responsive */
+        @media (max-width: 1100px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 768px) { .sidebar { width: 0; overflow: hidden; } .main { margin-left: 0; } }
+
+        .empty-state { text-align: center; padding: 3rem; color: var(--text-muted); font-size: 0.9rem; }
+        .dest-img-thumb { width: 40px; height: 40px; border-radius: 0.375rem; object-fit: cover; }
+        .user-avatar-sm { width: 32px; height: 32px; border-radius: 50%; background: var(--navy); color: var(--gold); display: inline-flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; }
+    </style>
+</head>
+<body>
+    <!-- ── Sidebar ── -->
+    <aside class="sidebar">
+        <div class="sidebar-logo">
+            Wan<span>der</span>
+            <span class="sidebar-badge">Admin Panel</span>
+        </div>
+        <nav class="sidebar-nav">
+            <a class="nav-item active" onclick="showTab('dashboard')" href="#">
+                <i class="fas fa-chart-line"></i> Dashboard
+            </a>
+            <a class="nav-item" onclick="showTab('bookings')" href="#">
+                <i class="fas fa-suitcase"></i> Bookings
+            </a>
+            <a class="nav-item" onclick="showTab('users')" href="#">
+                <i class="fas fa-users"></i> Users
+            </a>
+            <a class="nav-item" onclick="showTab('newsletter')" href="#">
+                <i class="fas fa-envelope"></i> Newsletter
+            </a>
+            <a class="nav-item" href="/" target="_blank">
+                <i class="fas fa-external-link-alt"></i> View Site
+            </a>
+        </nav>
+        <div class="sidebar-footer">
+            <div class="admin-greeting">Logged in as <strong>{{ admin_name }}</strong></div>
+            <button class="btn-logout" onclick="handleAdminLogout()">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+        </div>
+    </aside>
+
+    <!-- ── Main ── -->
+    <main class="main">
+        <div class="topbar">
+            <div class="topbar-title">Admin Dashboard</div>
+            <div class="topbar-right">
+                <span><span class="status-dot"></span>System Online</span>
+                <span id="lastRefresh">—</span>
+            </div>
+        </div>
+
+        <div class="content">
+            <!-- Stat Cards -->
+            <div class="stats-grid" id="statsGrid">
+                <div class="stat-card">
+                    <div class="stat-icon navy"><i class="fas fa-users"></i></div>
+                    <div><div class="stat-value" id="statUsers">—</div><div class="stat-label">Total Users</div></div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon gold"><i class="fas fa-suitcase"></i></div>
+                    <div><div class="stat-value" id="statBookings">—</div><div class="stat-label">Total Bookings</div></div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon green"><i class="fas fa-dollar-sign"></i></div>
+                    <div><div class="stat-value" id="statRevenue">—</div><div class="stat-label">Revenue (USD)</div></div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon blue"><i class="fas fa-envelope"></i></div>
+                    <div><div class="stat-value" id="statNewsletter">—</div><div class="stat-label">Subscribers</div></div>
+                </div>
+            </div>
+
+            <!-- Tab Nav -->
+            <div class="tab-nav">
+                <button class="tab-btn active" onclick="showTab('dashboard')">Overview</button>
+                <button class="tab-btn" onclick="showTab('bookings')">Bookings</button>
+                <button class="tab-btn" onclick="showTab('users')">Users</button>
+                <button class="tab-btn" onclick="showTab('newsletter')">Newsletter</button>
+            </div>
+
+            <!-- Dashboard Tab -->
+            <div class="tab-content active" id="tab-dashboard">
+                <div class="panel">
+                    <div class="panel-header">
+                        <div class="panel-title">Recent Bookings</div>
+                        <span class="panel-badge" id="recentBadge">Loading…</span>
+                    </div>
+                    <table class="data-table" id="recentTable">
+                        <thead>
+                            <tr>
+                                <th>#</th><th>Guest</th><th>Destination</th>
+                                <th>Date</th><th>Guests</th><th>Amount</th><th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recentBody"><tr><td colspan="7" class="empty-state">Loading…</td></tr></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Bookings Tab -->
+            <div class="tab-content" id="tab-bookings">
+                <div class="panel">
+                    <div class="panel-header">
+                        <div class="panel-title">All Bookings</div>
+                        <button class="action-btn confirm" onclick="loadAllBookings()"><i class="fas fa-sync-alt"></i> Refresh</button>
+                    </div>
+                    <table class="data-table">
+                        <thead>
+                            <tr><th>#</th><th>Guest</th><th>Destination</th><th>Travel Date</th><th>Guests</th><th>Amount</th><th>Status</th><th>Actions</th></tr>
+                        </thead>
+                        <tbody id="allBookingsBody"><tr><td colspan="8" class="empty-state">Loading…</td></tr></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Users Tab -->
+            <div class="tab-content" id="tab-users">
+                <div class="panel">
+                    <div class="panel-header">
+                        <div class="panel-title">Registered Users</div>
+                        <button class="action-btn confirm" onclick="loadUsers()"><i class="fas fa-sync-alt"></i> Refresh</button>
+                    </div>
+                    <table class="data-table">
+                        <thead><tr><th>#</th><th>Name</th><th>Email</th><th>Role</th><th>Joined</th></tr></thead>
+                        <tbody id="usersBody"><tr><td colspan="5" class="empty-state">Loading…</td></tr></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Newsletter Tab -->
+            <div class="tab-content" id="tab-newsletter">
+                <div class="panel">
+                    <div class="panel-header">
+                        <div class="panel-title">Newsletter Subscribers</div>
+                        <span class="panel-badge" id="newsletterBadge">Loading…</span>
+                    </div>
+                    <table class="data-table">
+                        <thead><tr><th>#</th><th>Email</th><th>Subscribed At</th></tr></thead>
+                        <tbody id="newsletterBody"><tr><td colspan="3" class="empty-state">Loading…</td></tr></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Toast -->
+    <div class="toast-admin" id="adminToast"></div>
+
+    <script>
+        function showToast(msg, type = 'success') {
+            const t = document.getElementById('adminToast');
+            t.textContent = msg;
+            t.className = `toast-admin ${type} show`;
+            setTimeout(() => t.classList.remove('show'), 3000);
+        }
+
+        function showTab(name) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            document.getElementById(`tab-${name}`).classList.add('active');
+            document.querySelectorAll('.tab-btn').forEach(btn => { if (btn.textContent.toLowerCase().includes(name.replace('-', ''))) btn.classList.add('active'); });
+            document.querySelectorAll('.nav-item').forEach(item => { if (item.textContent.trim().toLowerCase().includes(name)) item.classList.add('active'); });
+            if (name === 'bookings') loadAllBookings();
+            if (name === 'users') loadUsers();
+            if (name === 'newsletter') loadNewsletter();
+        }
+
+        function statusBadge(s) {
+            return `<span class="status-badge ${s}">${s}</span>`;
+        }
+
+        async function loadStats() {
+            try {
+                const res = await fetch('/admin/api/stats');
+                const d = await res.json();
+                document.getElementById('statUsers').textContent = d.total_users;
+                document.getElementById('statBookings').textContent = d.total_bookings;
+                document.getElementById('statRevenue').textContent = '$' + d.total_revenue.toLocaleString();
+                document.getElementById('statNewsletter').textContent = d.newsletter_count;
+                document.getElementById('lastRefresh').textContent = new Date().toLocaleTimeString();
+                document.getElementById('recentBadge').textContent = `${d.recent_bookings.length} entries`;
+
+                const tbody = document.getElementById('recentBody');
+                if (!d.recent_bookings.length) {
+                    tbody.innerHTML = '<tr><td colspan="7" class="empty-state">No bookings yet.</td></tr>';
+                    return;
+                }
+                tbody.innerHTML = d.recent_bookings.map((b, i) => `
+                    <tr>
+                        <td style="color:var(--text-muted)">#${b.id}</td>
+                        <td><strong>${b.user_name}</strong><br><small style="color:var(--text-muted)">${b.user_email}</small></td>
+                        <td>${b.destination_name}</td>
+                        <td>${b.travel_date}</td>
+                        <td>${b.num_guests}</td>
+                        <td><strong>$${(b.total_amount || 0).toLocaleString()}</strong></td>
+                        <td>${statusBadge(b.status)}</td>
+                    </tr>
+                `).join('');
+            } catch (e) {
+                showToast('Failed to load stats', 'error');
+            }
+        }
+
+        async function loadAllBookings() {
+            try {
+                const res = await fetch('/admin/api/bookings');
+                const d = await res.json();
+                const tbody = document.getElementById('allBookingsBody');
+                if (!d.bookings.length) {
+                    tbody.innerHTML = '<tr><td colspan="8" class="empty-state">No bookings yet.</td></tr>';
+                    return;
+                }
+                tbody.innerHTML = d.bookings.map(b => `
+                    <tr>
+                        <td style="color:var(--text-muted)">#${b.id}</td>
+                        <td>${b.user_name}</td>
+                        <td>${b.destination_name}</td>
+                        <td>${b.travel_date}</td>
+                        <td>${b.num_guests}</td>
+                        <td>$${(b.total_amount || 0).toLocaleString()}</td>
+                        <td>${statusBadge(b.status)}</td>
+                        <td>
+                            <button class="action-btn confirm" onclick="updateStatus(${b.id},'confirmed')">Confirm</button>
+                            <button class="action-btn cancel" onclick="updateStatus(${b.id},'cancelled')">Cancel</button>
+                        </td>
+                    </tr>
+                `).join('');
+            } catch (e) { showToast('Failed to load bookings', 'error'); }
+        }
+
+        async function updateStatus(id, status) {
+            try {
+                const res = await fetch(`/admin/api/bookings/${id}/status`, {
+                    method: 'PUT', headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ status })
+                });
+                const d = await res.json();
+                if (d.success) { showToast(`Booking #${id} marked as ${status}`); loadAllBookings(); }
+            } catch (e) { showToast('Update failed', 'error'); }
+        }
+
+        async function loadUsers() {
+            try {
+                const res = await fetch('/admin/api/users');
+                const d = await res.json();
+                const tbody = document.getElementById('usersBody');
+                if (!d.users.length) {
+                    tbody.innerHTML = '<tr><td colspan="5" class="empty-state">No users.</td></tr>';
+                    return;
+                }
+                tbody.innerHTML = d.users.map(u => `
+                    <tr>
+                        <td style="color:var(--text-muted)">#${u.id}</td>
+                        <td><div style="display:flex;align-items:center;gap:0.75rem"><span class="user-avatar-sm">${u.name.charAt(0)}</span> ${u.name}</div></td>
+                        <td>${u.email}</td>
+                        <td>${u.is_admin ? '<span class="status-badge confirmed">Admin</span>' : '<span class="status-badge pending">User</span>'}</td>
+                        <td style="color:var(--text-muted)">${new Date(u.created_at).toLocaleDateString()}</td>
+                    </tr>
+                `).join('');
+            } catch (e) { showToast('Failed to load users', 'error'); }
+        }
+
+        async function loadNewsletter() {
+            try {
+                const res = await fetch('/admin/api/newsletter');
+                const d = await res.json();
+                document.getElementById('newsletterBadge').textContent = `${d.count} subscribers`;
+                const tbody = document.getElementById('newsletterBody');
+                if (!d.subscribers.length) {
+                    tbody.innerHTML = '<tr><td colspan="3" class="empty-state">No subscribers yet.</td></tr>';
+                    return;
+                }
+                tbody.innerHTML = d.subscribers.map((s, i) => `
+                    <tr>
+                        <td style="color:var(--text-muted)">${i + 1}</td>
+                        <td>${s.email}</td>
+                        <td style="color:var(--text-muted)">${new Date(s.subscribed_at).toLocaleString()}</td>
+                    </tr>
+                `).join('');
+            } catch (e) { showToast('Failed to load newsletter', 'error'); }
+        }
+
+        async function handleAdminLogout() {
+            await fetch('/api/auth/logout', { method: 'POST' });
+            window.location.href = '/admin/login';
+        }
+
+        // Auto-refresh stats every 30s
+        loadStats();
+        setInterval(loadStats, 30000);
+    </script>
+</body>
+</html>
